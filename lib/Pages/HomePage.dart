@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tracker_application/Pages/ActivitiesPage.dart';
 import 'package:flutter_tracker_application/Pages/CalendarPage.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:provider/provider.dart';
@@ -12,13 +13,13 @@ class _HomePageState extends State<HomePage> {
   var selectedIndex = 0;
   void handleLogout() {
     Future.delayed(Duration.zero, () {
+      // aspetta che il widget sia costruito ritardando la funzione
       Provider.of<PageIndexProvider>(context, listen: false).selectedIndex = 0;
-    });
+    }); // porta alla pagina di login
   }
 
   @override
   Widget build(BuildContext context) {
-    //int selectedIndex;
     Widget page = const Placeholder();
 
     switch (selectedIndex) {
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
         page = const Placeholder();
         break;
       case 1:
-        page = const Placeholder();
+        page = ActivitiesPage();
         break;
       case 2:
         page = const Placeholder();
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   NavigationRailDestination(
                     icon: Icon(Icons.favorite),
-                    label: Text('Favorites'),
+                    label: Text('Activities'),
                   ),
                   NavigationRailDestination(
                     icon: Icon(Icons.insert_chart_outlined_rounded),
