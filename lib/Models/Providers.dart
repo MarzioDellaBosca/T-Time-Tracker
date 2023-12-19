@@ -1,7 +1,7 @@
 //import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-class PageIndexProvider with ChangeNotifier {
+class PageIndexProvider extends ChangeNotifier {
   int _selectedIndex = 0;
 
   int get selectedIndex => _selectedIndex;
