@@ -18,6 +18,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
     // Esempio di lista di stringhe, sostituisci con i tuoi dati
     List<String> items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+    List<Card> activities = [];
 
     return Row(
       children: [
@@ -29,7 +30,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                 Text("Activities:", style: style),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: items.length,
+                    itemCount: activities.length,
                     itemBuilder: (context, index) {
                       return ListTile(
                         title: Text(items[index]),
@@ -58,9 +59,41 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                       ),
                       child: Column(
                         children: [
-                          Text("Description:"),
+                          TextField(
+                            decoration: InputDecoration(
+                              labelText: 'Title',
+                            ),
+                            style: TextStyle(fontSize: 10),
+                            textAlign: TextAlign.center,
+                          ),
                           SizedBox(height: 10),
-                          Text("Testo di prova"),
+                          TextField(
+                            decoration: InputDecoration(
+                              labelText: 'Date',
+                            ),
+                            style: TextStyle(fontSize: 10),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 10),
+                          TextField(
+                            decoration: InputDecoration(
+                              labelText: 'Description',
+                              border: UnderlineInputBorder(),
+                            ),
+                            style: TextStyle(fontSize: 10),
+                            textAlign: TextAlign.center,
+                            minLines: 1,
+                            maxLines: 4,
+                          ),
+                          SizedBox(height: 10),
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Add your onPressed code here!
+                              },
+                              child: Text('Add'),
+                            ),
+                          ),
                         ],
                       ),
                     ),
