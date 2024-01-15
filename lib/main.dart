@@ -14,8 +14,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => PageIndexProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => PageIndexProvider()),
+        ChangeNotifierProvider(create: (context) => ActivitiesProvider()),
+      ],
       child: MaterialApp(
         title: 'T_Tracker',
         theme: ThemeData(

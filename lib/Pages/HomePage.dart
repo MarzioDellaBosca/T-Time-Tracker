@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Pages/ActivitiesPage.dart';
 import 'package:flutter_tracker_application/Pages/CalendarPage.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
@@ -11,6 +12,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var selectedIndex = 0;
+
+  List<Activity> activities = [];
+
   void handleLogout() {
     Future.delayed(Duration.zero, () {
       // aspetta che il widget sia costruito ritardando la funzione
@@ -20,6 +24,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var activitiesProvider = Provider.of<ActivitiesProvider>(context);
     Widget page = const Placeholder();
 
     switch (selectedIndex) {
@@ -27,7 +32,7 @@ class _HomePageState extends State<HomePage> {
         page = const Placeholder();
         break;
       case 1:
-        page = ActivitiesPage();
+        page = ActivitiesPage(activities: activitiesProvider.activities);
         break;
       case 2:
         page = const Placeholder();

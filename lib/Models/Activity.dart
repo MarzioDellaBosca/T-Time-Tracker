@@ -1,7 +1,7 @@
 import 'dart:math';
 
 class Activity {
-  final String _title;
+  String _title;
   final int _id;
   String _date;
   String? _description;
@@ -18,6 +18,10 @@ class Activity {
 
   void setDate(String newDate) {
     this._date = newDate;
+  }
+
+  void setTitle(String newTitle) {
+    this._title = newTitle;
   }
 
   String getDescription() {

@@ -9,10 +9,10 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displaySmall!.copyWith(
+    //final theme = Theme.of(context);
+    /*final style = theme.textTheme.displaySmall!.copyWith(
       color: theme.colorScheme.onPrimary,
-    );
+    );*/
     return Center(
       child: Container(
         color: Colors.deepPurple.shade50,
@@ -22,25 +22,25 @@ class _CalendarPageState extends State<CalendarPage> {
             SizedBox(height: 30),
             Row(
               children: [
+                SizedBox(width: 30),
                 Column(
                   children: [
                     Container(
                       width: 180, // Imposta la larghezza desiderata
                       height: 80, // Imposta l'altezza desiderata
-                      child: Card(
-                        color: theme.colorScheme.primary,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            'Activities: ',
-                            style: style,
-                            semanticsLabel: 'Activities: ',
-                          ),
+                      child: Text(
+                        "Activities:",
+                        style: TextStyle(
+                          color: Colors.deepPurple,
+                          fontSize: 24, // Imposta la dimensione del font
+                          fontWeight:
+                              FontWeight.bold, // Imposta il peso del font
                         ),
                       ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(width: 30)
               ],
             ),
           ],
@@ -80,12 +80,28 @@ class _MyCalendarState extends State<MyCalendar> {
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.blueGrey),
-              borderRadius: BorderRadius.circular(10.0),
             ),
             child: Center(
               child: Text(
                 '${date.day}',
                 style: Theme.of(context).textTheme.caption,
+              ),
+            ),
+          );
+        },
+        selectedBuilder: (context, date, _) {
+          return Container(
+            margin: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+              color: Colors.deepPurple, // Imposta il colore desiderato
+              border: Border.all(color: Colors.blueGrey),
+            ),
+            child: Center(
+              child: Text(
+                '${date.day}',
+                style: TextStyle(
+                    color: Colors.white), // Imposta il colore del testo
               ),
             ),
           );
