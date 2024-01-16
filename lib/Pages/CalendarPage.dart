@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
 
 class CalendarPage extends StatefulWidget {
   final List<Activity> activities;
@@ -23,7 +24,7 @@ class _CalendarPageState extends State<CalendarPage> {
         color: Colors.deepPurple.shade50,
         child: Column(
           children: [
-            MyCalendar(),
+            MyCalendar(activities: activities),
             SizedBox(height: 30),
             Row(
               children: [
@@ -56,23 +57,34 @@ class _CalendarPageState extends State<CalendarPage> {
 }
 
 class MyCalendar extends StatefulWidget {
+  final List<Activity> activities;
+  MyCalendar({required this.activities});
+
   @override
   _MyCalendarState createState() => _MyCalendarState();
 }
 
 class _MyCalendarState extends State<MyCalendar> {
+  List<Activity> get activities => widget.activities;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  final _events = {
-    DateTime.now(): ['Event A', 'Event B'],
-    DateTime.now().add(Duration(days: 1)): ['Event C'],
-    DateTime.now().add(Duration(days: 3)): ['Event D', 'Event E', 'Event F'],
-  };
+  Map<DateTime, List<String>> _events = {};
 
   @override
   Widget build(BuildContext context) {
+    for (var activity in activities) {
+      DateTime date = DateFormat('dd/MM/yy').parse(activity.getDate());
+      date = DateTime(date.year, date.month, date.day);
+      if (_events[date] == null) {
+        _events[date] = [activity.getTitle()];
+      } else {
+        _events[date]!.add(activity.getTitle());
+      }
+    }
+    //print(_events);
+
     return TableCalendar(
       firstDay: DateTime.utc(2020, 10, 16),
       lastDay: DateTime.utc(2030, 3, 14),
@@ -80,24 +92,36 @@ class _MyCalendarState extends State<MyCalendar> {
       calendarFormat: _calendarFormat,
       calendarBuilders: CalendarBuilders(
         defaultBuilder: (context, date, _) {
+          date = DateTime(date.year, date.month, date.day);
+          var todayEvents = _events[date] ?? [];
           return Container(
-            margin: const EdgeInsets.all(4.0),
-            padding: const EdgeInsets.all(10.0),
+            margin: const EdgeInsets.all(2.0),
+            padding: const EdgeInsets.all(5.0),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.blueGrey),
             ),
             child: Center(
-              child: Text(
-                '${date.day}',
-                style: Theme.of(context).textTheme.caption,
+              child: Row(
+                children: [
+                  Text(
+                    '${date.day}',
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                  if (todayEvents.isNotEmpty)
+                    Positioned(
+                      bottom: 0, // Posiziona l'icona in basso
+                      child: Icon(Icons.star,
+                          size: 20), // Mostra un'icona se ci sono eventi
+                    ),
+                ],
               ),
             ),
           );
         },
         selectedBuilder: (context, date, _) {
           return Container(
-            margin: const EdgeInsets.all(4.0),
-            padding: const EdgeInsets.all(10.0),
+            margin: const EdgeInsets.all(2.0),
+            padding: const EdgeInsets.all(5.0),
             decoration: BoxDecoration(
               color: Colors.deepPurple, // Imposta il colore desiderato
               border: Border.all(color: Colors.blueGrey),

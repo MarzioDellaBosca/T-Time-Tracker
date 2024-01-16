@@ -6,16 +6,19 @@ class Activity {
   String _date;
   String _description;
   int _duration;
+  String _category;
 
   Activity(
       {required String title,
       required String date,
       required String description,
-      required int duration})
+      required int duration,
+      required String category})
       : _title = title,
         _date = date,
         _description = description,
         _duration = duration,
+        _category = category,
         _id = Random().nextInt(10000000);
 
   void setDescription(String newDescription) {
@@ -34,6 +37,10 @@ class Activity {
     this._duration = newDuration;
   }
 
+  void setCategory(String newCategory) {
+    this._category = newCategory;
+  }
+
   String getDescription() {
     return this._description;
   }
@@ -48,6 +55,10 @@ class Activity {
 
   int getDuration() {
     return this._duration;
+  }
+
+  String getCategory() {
+    return this._category;
   }
 
   int getId() {

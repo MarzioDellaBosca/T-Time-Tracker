@@ -16,6 +16,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
   final dateController = TextEditingController();
   final durationController = TextEditingController();
   final descriptionController = TextEditingController();
+  String? activityType;
 
   List<Activity> get activities => widget.activities;
   Activity? selectedActivity;
@@ -98,9 +99,17 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
             durationController.clear();
           }
         }
+        if (activityType != null) {
+          activitiesProvider.activities[index].setCategory(activityType!);
+          activityType = null;
+        }
 
         // Notifica il provider che le attività sono cambiate
         activitiesProvider.notifyListeners();
+        setState(() {
+          activityType =
+              null; // o 'Type' se 'Type' è un'opzione nel tuo DropdownButton
+        });
       }
     }
   }
@@ -110,6 +119,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
     String date = dateController.text;
     String duration = durationController.text;
     String description = descriptionController.text;
+    String category = activityType ?? 'Other';
 
     if (duration.isEmpty) duration = '0';
     if (description.isEmpty) description = 'No description';
@@ -124,7 +134,8 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
           title: title,
           date: date,
           description: description,
-          duration: int.parse(duration));
+          duration: int.parse(duration),
+          category: category);
 
       Provider.of<ActivitiesProvider>(context, listen: false)
           .addActivity(newActivity);
@@ -133,6 +144,10 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       dateController.clear();
       descriptionController.clear();
       durationController.clear();
+      setState(() {
+        activityType =
+            null; // o 'Type' se 'Type' è un'opzione nel tuo DropdownButton
+      });
     }
   }
 
@@ -203,13 +218,72 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                       ),
                       child: Column(
                         children: [
-                          TextField(
-                            controller: titleController,
-                            decoration: InputDecoration(
-                              labelText: 'Title',
+                          Container(
+                            height: 60.0,
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: titleController,
+                                    decoration: InputDecoration(
+                                      labelText: 'Title',
+                                    ),
+                                    style: TextStyle(fontSize: 10),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: ElevatedButton(
+                                      onPressed: () => {},
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius
+                                              .zero, // make the button rectangular
+                                        ),
+                                      ),
+                                      child: DropdownButton<String>(
+                                        hint: Text('Type',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black87)),
+                                        value: activityType,
+                                        /*icon: const Icon(
+                                            Icons.skateboarding_outlined),
+                                        iconSize: 24,*/
+                                        elevation: 15,
+                                        style: const TextStyle(
+                                            color: Colors.deepPurple),
+                                        underline: Container(
+                                          height: 0,
+                                          color: Colors.deepPurpleAccent,
+                                        ),
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            activityType = newValue;
+                                          });
+                                        },
+                                        items: <String>[
+                                          'Work',
+                                          'Sport',
+                                          'Free Time',
+                                          'Other'
+                                        ].map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                            style: TextStyle(fontSize: 10),
-                            textAlign: TextAlign.center,
                           ),
                           SizedBox(height: 10),
                           Container(
@@ -345,10 +419,36 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                           ],
                                         ),
                                         SizedBox(height: 10),
-                                        Text(
-                                          'Description:',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Description:',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: 'Type: ',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: selectedActivity!
+                                                          .getCategory(),
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal)),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         SizedBox(height: 5),
                                         Text(
