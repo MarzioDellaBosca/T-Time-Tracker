@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
         page = const Placeholder();
         break;
       case 3:
-        page = CalendarPage();
+        page = CalendarPage(activities: activitiesProvider.activities);
         break;
       case 4:
         page = const Placeholder();

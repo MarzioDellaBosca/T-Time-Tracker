@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
+  final List<Activity> activities;
+  CalendarPage({required this.activities});
+
   @override
   State<CalendarPage> createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  List<Activity> get activities => widget.activities;
   @override
   Widget build(BuildContext context) {
     //final theme = Theme.of(context);

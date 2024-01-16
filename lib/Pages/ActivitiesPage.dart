@@ -14,10 +14,45 @@ class ActivitiesPage extends StatefulWidget {
 class _ActivitiesPageState extends State<ActivitiesPage> {
   final titleController = TextEditingController();
   final dateController = TextEditingController();
+  final durationController = TextEditingController();
   final descriptionController = TextEditingController();
 
   List<Activity> get activities => widget.activities;
   Activity? selectedActivity;
+
+  bool isNotValidDuration(String dur) {
+    try {
+      int.parse(dur);
+      return false;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  void errorDiag(String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Text(
+              'Error!',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+            ),
+          ),
+          content: Text(msg),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void deleteActivity() {
     if (selectedActivity != null) {
@@ -41,13 +76,27 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
           titleController.clear();
         }
         if (dateController.text.isNotEmpty) {
-          activitiesProvider.activities[index].setDate(dateController.text);
-          dateController.clear();
+          if (!RegExp(r'^\d{2}/\d{2}/\d{2}$').hasMatch(dateController.text)) {
+            // Se la data non è nel formato corretto, mostra un AlertDialog
+            errorDiag('Incorrect date format. Must be dd/mm/yy.');
+          } else {
+            activitiesProvider.activities[index].setDate(dateController.text);
+            dateController.clear();
+          }
         }
         if (descriptionController.text.isNotEmpty) {
           activitiesProvider.activities[index]
               .setDescription(descriptionController.text);
           descriptionController.clear();
+        }
+        if (durationController.text.isNotEmpty) {
+          if (isNotValidDuration(durationController.text)) {
+            errorDiag('Incorrect duration format. Must be hh.');
+          } else {
+            activitiesProvider.activities[index]
+                .setDuration(int.parse(durationController.text));
+            durationController.clear();
+          }
         }
 
         // Notifica il provider che le attività sono cambiate
@@ -59,16 +108,32 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
   void addActivity() {
     String title = titleController.text;
     String date = dateController.text;
+    String duration = durationController.text;
     String description = descriptionController.text;
-    Activity newActivity =
-        Activity(title: title, date: date, description: description);
 
-    Provider.of<ActivitiesProvider>(context, listen: false)
-        .addActivity(newActivity);
+    if (duration.isEmpty) duration = '0';
+    if (description.isEmpty) description = 'No description';
 
-    titleController.clear();
-    dateController.clear();
-    descriptionController.clear();
+    if (!RegExp(r'^\d{2}/\d{2}/\d{2}$').hasMatch(date)) {
+      // Se la data non è nel formato corretto, mostra un AlertDialog
+      errorDiag('Incorrect date format. Must be dd/mm/yy.');
+    } else if (isNotValidDuration(duration)) {
+      errorDiag('Incorrect duration format. Must be hh.');
+    } else {
+      Activity newActivity = Activity(
+          title: title,
+          date: date,
+          description: description,
+          duration: int.parse(duration));
+
+      Provider.of<ActivitiesProvider>(context, listen: false)
+          .addActivity(newActivity);
+
+      titleController.clear();
+      dateController.clear();
+      descriptionController.clear();
+      durationController.clear();
+    }
   }
 
   void selectActivity(Activity activity) {
@@ -147,14 +212,39 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(height: 10),
-                          TextField(
-                            controller: dateController,
-                            decoration: InputDecoration(
-                                labelText: 'Date',
-                                helperText: 'dd/mm/yy',
-                                helperStyle: TextStyle(color: Colors.grey)),
-                            style: TextStyle(fontSize: 10),
-                            textAlign: TextAlign.center,
+                          Container(
+                            height: 60.0,
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: dateController,
+                                    decoration: InputDecoration(
+                                        labelText: 'Date',
+                                        helperText: 'dd/mm/yy',
+                                        helperStyle:
+                                            TextStyle(color: Colors.grey)),
+                                    style: TextStyle(fontSize: 10),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: TextField(
+                                    controller: durationController,
+                                    decoration: InputDecoration(
+                                        labelText: 'Duration',
+                                        helperText: 'hh',
+                                        helperStyle:
+                                            TextStyle(color: Colors.grey)),
+                                    style: TextStyle(fontSize: 10),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                           SizedBox(height: 10),
                           TextField(
@@ -226,6 +316,26 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                                   TextSpan(
                                                       text: selectedActivity!
                                                           .getDate(),
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal)),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: 'Duration: ',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text:
+                                                          '${selectedActivity!.getDuration()} h',
                                                       style: TextStyle(
                                                           fontWeight: FontWeight
                                                               .normal)),
