@@ -13,8 +13,29 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   List<Activity> get activities => widget.activities;
+  DateTime? _selectedDay;
+  Activity? selectedActivity;
+
+  List<Activity> _activitiesForSelectedDay() {
+    return activities.where((activity) {
+      return DateFormat('dd/MM/yy').parse(activity.getDate()).day ==
+              _selectedDay?.day &&
+          DateFormat('dd/MM/yy').parse(activity.getDate()) ==
+              _selectedDay?.month &&
+          DateFormat('dd/MM/yy').parse(activity.getDate()) ==
+              _selectedDay?.year;
+    }).toList();
+  }
+
+  void selectActivity(Activity activity) {
+    setState(() {
+      selectedActivity = activity;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    var activitiesForSelectedDay = _activitiesForSelectedDay();
     //final theme = Theme.of(context);
     /*final style = theme.textTheme.displaySmall!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -24,7 +45,14 @@ class _CalendarPageState extends State<CalendarPage> {
         color: Colors.deepPurple.shade50,
         child: Column(
           children: [
-            MyCalendar(activities: activities),
+            MyCalendar(
+              activities: activities,
+              onDaySelected: (selectedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                });
+              },
+            ),
             SizedBox(height: 30),
             Row(
               children: [
@@ -44,6 +72,30 @@ class _CalendarPageState extends State<CalendarPage> {
                         ),
                       ),
                     ),
+                    /* Expanded(
+                      child: ListView.builder(
+                        itemCount: activitiesForSelectedDay.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(activitiesForSelectedDay[index]
+                                      .getTitle()), // Titolo a sinistra
+                                  Text(activitiesForSelectedDay[index]
+                                      .getDate()), // Data a destra
+                                ],
+                              ),
+                              onTap: () {
+                                selectActivity(activitiesForSelectedDay[index]);
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),*/
                   ],
                 ),
                 SizedBox(width: 30)
@@ -58,7 +110,8 @@ class _CalendarPageState extends State<CalendarPage> {
 
 class MyCalendar extends StatefulWidget {
   final List<Activity> activities;
-  MyCalendar({required this.activities});
+  final ValueChanged<DateTime> onDaySelected;
+  MyCalendar({required this.onDaySelected, required this.activities});
 
   @override
   _MyCalendarState createState() => _MyCalendarState();
@@ -71,6 +124,16 @@ class _MyCalendarState extends State<MyCalendar> {
   DateTime? _selectedDay;
 
   Map<DateTime, List<String>> _events = {};
+
+  void _onDaySelected(DateTime selectedDay) {
+    setState(() {
+      _selectedDay = selectedDay;
+    });
+
+    if (_selectedDay != null) {
+      widget.onDaySelected(_selectedDay!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,17 +164,44 @@ class _MyCalendarState extends State<MyCalendar> {
               border: Border.all(color: Colors.blueGrey),
             ),
             child: Center(
-              child: Row(
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  Text(
-                    '${date.day}',
-                    style: Theme.of(context).textTheme.caption,
+                  Container(
+                    width: 30,
+                    //alignment: Alignment.center,
+                    child: date.day.toString().length == 1
+                        ? Text(
+                            '  ${date.day}',
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: todayEvents.isNotEmpty
+                                          ? Colors.transparent
+                                          : Colors.black,
+                                    ),
+                          )
+                        : Text(
+                            ' ${date.day}',
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: todayEvents.isNotEmpty
+                                          ? Colors.transparent
+                                          : Colors.black,
+                                    ),
+                          ),
                   ),
                   if (todayEvents.isNotEmpty)
                     Positioned(
                       bottom: 0, // Posiziona l'icona in basso
-                      child: Icon(Icons.star,
-                          size: 20), // Mostra un'icona se ci sono eventi
+                      child: Opacity(
+                        opacity: 0.7, // Imposta l'opacità al 50%
+                        child: Icon(
+                          Icons.star,
+                          size: 25, // Mostra un'icona se ci sono eventi
+                          color:
+                              Colors.deepPurple, // Cambia il colore dell'icona
+                        ),
+                      ),
                     ),
                 ],
               ),
