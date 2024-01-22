@@ -3,7 +3,6 @@ import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:flutter_tracker_application/Pages/HomePage.dart';
 import 'package:flutter_tracker_application/Pages/Login.dart';
 import 'package:provider/provider.dart';
-//import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MainApp());

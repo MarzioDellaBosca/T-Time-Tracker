@@ -269,7 +269,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                         items: <String>[
                                           'Work',
                                           'Sport',
-                                          'Free Time',
+                                          'Study',
                                           'Other'
                                         ].map<DropdownMenuItem<String>>(
                                             (String value) {

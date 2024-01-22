@@ -3,6 +3,7 @@ import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Pages/ActivitiesPage.dart';
 import 'package:flutter_tracker_application/Pages/CalendarPage.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
+import 'package:flutter_tracker_application/Pages/StatisticsPage.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         page = ActivitiesPage(activities: activitiesProvider.activities);
         break;
       case 2:
-        page = const Placeholder();
+        page = StatisticsPage(activities: activitiesProvider.activities);
         break;
       case 3:
         page = CalendarPage(activities: activitiesProvider.activities);
