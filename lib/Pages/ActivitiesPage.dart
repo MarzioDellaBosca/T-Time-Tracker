@@ -72,44 +72,29 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       int index = activitiesProvider.activities.indexOf(selectedActivity!);
 
       if (index != -1) {
-        if (titleController.text.isNotEmpty) {
-          activitiesProvider.activities[index].setTitle(titleController.text);
+        if (dateController.text.isNotEmpty &&
+            !RegExp(r'^\d{2}/\d{2}/\d{2}$').hasMatch(dateController.text)) {
+          errorDiag('Incorrect date format. Must be dd/mm/yy.');
+        } else if (durationController.text.isNotEmpty &&
+            isNotValidDuration(durationController.text)) {
+          errorDiag('Incorrect duration format. Must be hh.');
+        } else {
+          activitiesProvider.modifyActivity(
+              index,
+              titleController.text,
+              dateController.text,
+              durationController.text,
+              descriptionController.text,
+              activityType ?? 'Other');
           titleController.clear();
-        }
-        if (dateController.text.isNotEmpty) {
-          if (!RegExp(r'^\d{2}/\d{2}/\d{2}$').hasMatch(dateController.text)) {
-            // Se la data non è nel formato corretto, mostra un AlertDialog
-            errorDiag('Incorrect date format. Must be dd/mm/yy.');
-          } else {
-            activitiesProvider.activities[index].setDate(dateController.text);
-            dateController.clear();
-          }
-        }
-        if (descriptionController.text.isNotEmpty) {
-          activitiesProvider.activities[index]
-              .setDescription(descriptionController.text);
+          dateController.clear();
           descriptionController.clear();
+          durationController.clear();
+          setState(() {
+            activityType =
+                null; // o 'Type' se 'Type' è un'opzione nel tuo DropdownButton
+          });
         }
-        if (durationController.text.isNotEmpty) {
-          if (isNotValidDuration(durationController.text)) {
-            errorDiag('Incorrect duration format. Must be hh.');
-          } else {
-            activitiesProvider.activities[index]
-                .setDuration(int.parse(durationController.text));
-            durationController.clear();
-          }
-        }
-        if (activityType != null) {
-          activitiesProvider.activities[index].setCategory(activityType!);
-          activityType = null;
-        }
-
-        // Notifica il provider che le attività sono cambiate
-        activitiesProvider.notifyListeners();
-        setState(() {
-          activityType =
-              null; // o 'Type' se 'Type' è un'opzione nel tuo DropdownButton
-        });
       }
     }
   }

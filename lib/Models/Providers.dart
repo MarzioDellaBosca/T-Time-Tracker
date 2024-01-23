@@ -29,6 +29,28 @@ class ActivitiesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //index, titleController.text, dateController.text, durationController.text, descriptionController.text, activityType
+  void modifyActivity(int index, String title, String date, String duration,
+      String description, String activityType) {
+    if (title.isNotEmpty) {
+      _activities[index].setTitle(title);
+    }
+    if (duration.isNotEmpty) {
+      _activities[index].setDuration(int.parse(duration));
+    }
+    if (description.isNotEmpty) {
+      _activities[index].setDescription(description);
+    }
+    if (activityType.isNotEmpty) {
+      _activities[index].setCategory(activityType);
+    }
+    if (date.isNotEmpty) {
+      _activities[index].setDate(date);
+      sortActivitiesByDate();
+    }
+    notifyListeners();
+  }
+
   void sortActivitiesByDate() {
     _activities.sort((a, b) {
       DateTime dateA = DateFormat('dd/MM/yy').parse(a.getDate());

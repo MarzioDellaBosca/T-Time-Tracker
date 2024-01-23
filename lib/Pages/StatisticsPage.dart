@@ -190,6 +190,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         value: _hoursForWorkCat,
                         color: Colors.yellow),
                     PieChartSectionData(
+                        title: '',
                         value: _seriesForWorkCat.isNotEmpty ||
                                 _seriesForOtherCat.isNotEmpty ||
                                 _seriesForSportCat.isNotEmpty ||
