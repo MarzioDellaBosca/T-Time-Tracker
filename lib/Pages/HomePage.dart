@@ -3,6 +3,7 @@ import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Pages/ActivitiesPage.dart';
 import 'package:flutter_tracker_application/Pages/CalendarPage.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
+import 'package:flutter_tracker_application/Pages/Home.dart';
 import 'package:flutter_tracker_application/Pages/StatisticsPage.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
 
     switch (selectedIndex) {
       case 0:
-        page = const Placeholder();
+        page = Home();
         break;
       case 1:
         page = ActivitiesPage(activities: activitiesProvider.activities);
