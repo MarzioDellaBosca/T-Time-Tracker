@@ -1,4 +1,3 @@
-//import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:intl/intl.dart';
@@ -57,6 +56,27 @@ class ActivitiesProvider extends ChangeNotifier {
       DateTime dateB = DateFormat('dd/MM/yy').parse(b.getDate());
       return dateA.compareTo(dateB);
     });
+    notifyListeners();
+  }
+
+  void resetActivities() {
+    _activities = [];
+    notifyListeners();
+  }
+
+  void loadActivities(List<Activity> activities) {
+    _activities = activities;
+    notifyListeners();
+  }
+}
+
+class UserProvider extends ChangeNotifier {
+  String _username = '';
+
+  String get username => _username;
+
+  set username(String newUsername) {
+    _username = newUsername;
     notifyListeners();
   }
 }

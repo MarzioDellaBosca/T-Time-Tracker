@@ -1,8 +1,5 @@
-import 'dart:math';
-
 class Activity {
   String _title;
-  final int _id;
   String _date;
   String _description;
   int _duration;
@@ -18,8 +15,7 @@ class Activity {
         _date = date,
         _description = description,
         _duration = duration,
-        _category = category,
-        _id = Random().nextInt(10000000);
+        _category = category;
 
   void setDescription(String newDescription) {
     this._description = newDescription;
@@ -61,7 +57,8 @@ class Activity {
     return this._category;
   }
 
-  int getId() {
-    return this._id;
+  @override
+  String toString() {
+    return '$_title, $_date, $_description, $_duration, $_category';
   }
 }

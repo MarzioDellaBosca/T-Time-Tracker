@@ -17,6 +17,7 @@ class MainApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => PageIndexProvider()),
         ChangeNotifierProvider(create: (context) => ActivitiesProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MaterialApp(
         title: 'T_Tracker',
@@ -43,13 +44,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     int selectedIndex = Provider.of<PageIndexProvider>(context).selectedIndex;
+    var userProvider = Provider.of<UserProvider>(context);
+    var activitiesProvider = Provider.of<ActivitiesProvider>(context);
+
     Widget page;
 
     switch (selectedIndex) {
       case 0:
         page = Login();
       case 1:
-        page = HomePage();
+        page = HomePage(
+          username: userProvider.username,
+          activities: activitiesProvider.activities,
+        );
       default:
         page = const Placeholder();
     }
