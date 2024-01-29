@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_tracker_application/Models/Utilities.dart';
 
 class ActivitiesPage extends StatefulWidget {
   final List<Activity> activities;
@@ -20,40 +21,6 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
   List<Activity> get activities => widget.activities;
   Activity? selectedActivity;
-
-  bool isNotValidDuration(String dur) {
-    try {
-      int.parse(dur);
-      return false;
-    } catch (e) {
-      return true;
-    }
-  }
-
-  void errorDiag(String msg) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: Text(
-              'Error!',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-            ),
-          ),
-          content: Text(msg),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   void deleteActivity() {
     if (selectedActivity != null) {
@@ -74,10 +41,11 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       if (index != -1) {
         if (dateController.text.isNotEmpty &&
             !RegExp(r'^\d{2}/\d{2}/\d{2}$').hasMatch(dateController.text)) {
-          errorDiag('Incorrect date format. Must be dd/mm/yy.');
+          Utility.errorDiag(
+              'Incorrect date format. Must be dd/mm/yy.', context);
         } else if (durationController.text.isNotEmpty &&
-            isNotValidDuration(durationController.text)) {
-          errorDiag('Incorrect duration format. Must be hh.');
+            Utility.isNotValidDuration(durationController.text)) {
+          Utility.errorDiag('Incorrect duration format. Must be hh.', context);
         } else {
           activitiesProvider.modifyActivity(
               index,
@@ -111,9 +79,9 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
     if (!RegExp(r'^\d{2}/\d{2}/\d{2}$').hasMatch(date)) {
       // Se la data non è nel formato corretto, mostra un AlertDialog
-      errorDiag('Incorrect date format. Must be dd/mm/yy.');
-    } else if (isNotValidDuration(duration)) {
-      errorDiag('Incorrect duration format. Must be hh.');
+      Utility.errorDiag('Incorrect date format. Must be dd/mm/yy.', context);
+    } else if (Utility.isNotValidDuration(duration)) {
+      Utility.errorDiag('Incorrect duration format. Must be hh.', context);
     } else {
       Activity newActivity = Activity(
           title: title,

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:encrypt/encrypt.dart';
+import 'package:flutter_tracker_application/Models/Utilities.dart';
 
 class Login extends StatelessWidget {
   final _userNameController = TextEditingController();
@@ -14,42 +15,6 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void errorDiag(String msg) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Center(
-              child: Text(
-                'Error!',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-              ),
-            ),
-            content: Text(msg),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-
-    String padKey(String key) {
-      if (key.length > 32) {
-        return key.substring(
-            0, 32); // Se la chiave è più lunga di 32 caratteri, troncala
-      } else {
-        return key.padRight(32,
-            '.'); // Altrimenti, aggiungi '.' alla fine fino a raggiungere 32 caratteri
-      }
-    }
-
     void toLog(String username, String password) async {
       final currentDirectory = Directory.current.path;
       final activitiesProvider =
@@ -64,50 +29,57 @@ class Login extends StatelessWidget {
         pageProvider.selectedIndex = 1;
       } else if (!File('$currentDirectory/lib/Models/Users/$username.txt')
           .existsSync()) {
-        errorDiag('Wrong username!');
+        Utility.errorDiag('Wrong username!', context);
         _userNameController.clear();
       } else {
-        final key = Key.fromUtf8(padKey(password)); // Genera una chiave
+        final key = Key.fromUtf8(Utility.padKey(password)); // Genera una chiave
         final file = File('$currentDirectory/lib/Models/Users/$username.txt');
         List<String> lines = await file.readAsLines();
         final iv = IV.fromBase64(lines[0]);
         final decrypter = Encrypter(AES(key));
 
-        final decryptedPassword =
-            decrypter.decrypt(Encrypted.fromBase64(lines[1]), iv: iv);
+        try {
+          final decryptedPassword =
+              decrypter.decrypt(Encrypted.fromBase64(lines[1]), iv: iv);
 
-        if (decryptedPassword == password) {
-          _userNameController.clear();
-          _userPwdController.clear();
+          if (decryptedPassword == password) {
+            _userNameController.clear();
+            _userPwdController.clear();
 
-          List<Activity> activities = [];
+            List<Activity> activities = [];
 
-          for (var i = 2; i < lines.length; i++) {
-            // Decrittografa la riga
-            final decryptedLine =
-                decrypter.decrypt(Encrypted.fromBase64(lines[i]), iv: iv);
+            for (var i = 2; i < lines.length; i++) {
+              // Decrittografa la riga
+              final decryptedLine =
+                  decrypter.decrypt(Encrypted.fromBase64(lines[i]), iv: iv);
 
-            // Suddividi la riga in componenti separate
-            List<String> components = decryptedLine.split(', ');
+              // Suddividi la riga in componenti separate
+              List<String> components = decryptedLine.split(', ');
 
-            // Crea un'attività da quelle componenti
-            Activity activity = Activity(
-              title: components[0],
-              date: components[1],
-              description: components[2],
-              duration: int.parse(components[3]),
-              category: components[4],
-            );
-            activities.add(activity);
+              // Crea un'attività da quelle componenti
+              Activity activity = Activity(
+                title: components[0],
+                date: components[1],
+                description: components[2],
+                duration: int.parse(components[3]),
+                category: components[4],
+              );
+              activities.add(activity);
+            }
+            activitiesProvider.loadActivities(activities);
+            userProvider.username = username;
+            userProvider.password = password;
+            userProvider.iv = iv;
+            pageProvider.selectedIndex = 1;
+          } else {
+            Utility.errorDiag('Wrong password!', context);
+            _userPwdController.clear();
+            return;
           }
-          activitiesProvider.loadActivities(activities);
-          userProvider.username = username;
-          userProvider.password = password;
-          userProvider.iv = iv;
-          pageProvider.selectedIndex = 1;
-        } else {
-          errorDiag('Wrong password!');
+        } catch (e) {
+          Utility.errorDiag('Wrong password!', context);
           _userPwdController.clear();
+          return;
         }
       }
     }
@@ -121,18 +93,20 @@ class Login extends StatelessWidget {
           Provider.of<PageIndexProvider>(context, listen: false);
 
       if (await file.exists()) {
-        errorDiag('A user with this username already exists.');
+        Utility.errorDiag('A user with this username already exists.', context);
         _userNameController.clear();
       } else if (username == 'admin') {
-        errorDiag('This username is reserved.');
+        Utility.errorDiag('This username is reserved.', context);
         _userNameController.clear();
       } else if (username == '') {
-        errorDiag('Username cannot be empty.');
+        Utility.errorDiag('Username cannot be empty.', context);
       } else if (password.length > 32) {
-        errorDiag('Password cannot be longer than 32 characters.');
+        Utility.errorDiag(
+            'Password cannot be longer than 32 characters.', context);
         _userPwdController.clear();
       } else if (username.length > 32) {
-        errorDiag('Username cannot be longer than 32 characters.');
+        Utility.errorDiag(
+            'Username cannot be longer than 32 characters.', context);
         _userNameController.clear();
       } else {
         final iv = IV.fromSecureRandom(16); // Genera un IV casuale di 16 byte
