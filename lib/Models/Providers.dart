@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:intl/intl.dart';
+import 'package:encrypt/encrypt.dart';
 
 class PageIndexProvider extends ChangeNotifier {
   int _selectedIndex = 0;
@@ -72,11 +73,25 @@ class ActivitiesProvider extends ChangeNotifier {
 
 class UserProvider extends ChangeNotifier {
   String _username = '';
+  String _password = '';
+  IV _iv = IV.fromLength(16);
 
   String get username => _username;
+  String get password => _password;
+  IV get iv => _iv;
 
   set username(String newUsername) {
     _username = newUsername;
+    notifyListeners();
+  }
+
+  set password(String newPassword) {
+    _password = newPassword;
+    notifyListeners();
+  }
+
+  set iv(IV newIv) {
+    _iv = newIv;
     notifyListeners();
   }
 }

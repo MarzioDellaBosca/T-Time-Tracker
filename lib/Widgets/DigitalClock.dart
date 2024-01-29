@@ -15,7 +15,7 @@ class _DigitalClockState extends State<DigitalClock> {
 
   @override
   Widget build(BuildContext context) {
-    return TimerBuilder.periodic(Duration(seconds: 20), builder: (context) {
+    return TimerBuilder.periodic(Duration(seconds: 10), builder: (context) {
       return Text(
         "${getSystemTime()}",
         style: TextStyle(

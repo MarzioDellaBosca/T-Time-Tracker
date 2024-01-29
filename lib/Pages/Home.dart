@@ -4,12 +4,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class Home extends StatefulWidget {
+  final String username;
+  Home({required this.username});
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  //Position? _currentPosition;
+  String get username => widget.username;
   var style =
       TextStyle(fontSize: 30, color: Colors.blue, fontWeight: FontWeight.bold);
 
@@ -166,7 +168,8 @@ class _HomeState extends State<Home> {
                           height: MediaQuery.of(context).size.height / 4,
                           width: MediaQuery.of(context).size.width / 4,
                           margin: EdgeInsets.all(10),
-                          child: Center(child: Text('Hello!', style: style)),
+                          child: Center(
+                              child: Text('Hello ${username}!', style: style)),
                         ),
                       ),
                       SizedBox(width: 10),

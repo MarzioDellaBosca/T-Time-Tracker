@@ -55,6 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
       case 1:
         page = HomePage(
           username: userProvider.username,
+          password: userProvider.password,
+          iv: userProvider.iv,
           activities: activitiesProvider.activities,
         );
       default:

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Key;
 import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Pages/ActivitiesPage.dart';
 import 'package:flutter_tracker_application/Pages/CalendarPage.dart';
@@ -8,11 +8,28 @@ import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:flutter_tracker_application/Pages/Home.dart';
 import 'package:flutter_tracker_application/Pages/StatisticsPage.dart';
 import 'package:provider/provider.dart';
+import 'package:encrypt/encrypt.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
+  final String password;
+  final IV iv;
   final List<Activity> activities;
-  HomePage({required this.username, required this.activities});
+  HomePage(
+      {required this.username,
+      required this.password,
+      required this.iv,
+      required this.activities});
+
+  String padKey(String key) {
+    if (key.length > 32) {
+      return key.substring(
+          0, 32); // Se la chiave è più lunga di 32 caratteri, troncala
+    } else {
+      return key.padRight(32,
+          '.'); // Altrimenti, aggiungi '.' alla fine fino a raggiungere 32 caratteri
+    }
+  }
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,27 +38,55 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var selectedIndex = 0;
   String get username => widget.username;
+  String get password => widget.password;
+  IV get iv => widget.iv;
   List<Activity> get activities => widget.activities;
 
+  String padKey(String key) {
+    if (key.length > 32) {
+      return key.substring(
+          0, 32); // Se la chiave è più lunga di 32 caratteri, troncala
+    } else {
+      return key.padRight(32,
+          '.'); // Altrimenti, aggiungi '.' alla fine fino a raggiungere 32 caratteri
+    }
+  }
+
   void handleLogout() async {
+    final activitiesProvider =
+        Provider.of<ActivitiesProvider>(context, listen: false);
+    final pageProvider = Provider.of<PageIndexProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     if (username != 'admin') {
       final currentDirectory = Directory.current.path;
       final file = File('$currentDirectory/lib/Models/Users/$username.txt');
+      final key = Key.fromUtf8(padKey(password));
+      final encrypter = Encrypter(AES(key));
 
-      List<String> lines = await file.readAsLines();
+      final encryptedPassword = encrypter.encrypt(password, iv: iv);
 
-      lines = [
-        lines.first, // Mantieni la password già presente nella prima riga
-        ...activities.map((activity) =>
-            activity.toString()), // Aggiungi una riga per ogni attività
-      ];
-      await file.writeAsString(lines.join('\n'));
+      // Scrivi l'IV e la password criptata nel file
+      await file.writeAsString('${iv.base64}\n${encryptedPassword.base64}\n');
+
+      // Cripta e scrivi ogni attività
+      for (var activity in activitiesProvider.activities) {
+        final encryptedActivity = encrypter.encrypt(
+          activity.toString(),
+          iv: iv,
+        );
+        await file.writeAsString('${encryptedActivity.base64}\n',
+            mode: FileMode.append);
+      }
     }
-    Provider.of<ActivitiesProvider>(context, listen: false).resetActivities();
+    activitiesProvider.resetActivities();
+    userProvider.username = '';
+    userProvider.password = '';
+    userProvider.iv = IV.fromLength(16);
 
     Future.delayed(Duration.zero, () {
       // aspetta che il widget sia costruito ritardando la funzione
-      Provider.of<PageIndexProvider>(context, listen: false).selectedIndex = 0;
+      pageProvider.selectedIndex = 0;
     }); // porta alla pagina di login
   }
 
@@ -53,7 +98,7 @@ class _HomePageState extends State<HomePage> {
 
     switch (selectedIndex) {
       case 0:
-        page = Home();
+        page = Home(username: username);
         break;
       case 1:
         page = ActivitiesPage(activities: activitiesProvider.activities);
