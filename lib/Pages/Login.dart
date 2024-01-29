@@ -5,7 +5,6 @@ import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
-import 'dart:convert';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_tracker_application/Models/Utilities.dart';
 
@@ -49,14 +48,11 @@ class Login extends StatelessWidget {
             List<Activity> activities = [];
 
             for (var i = 2; i < lines.length; i++) {
-              // Decrittografa la riga
               final decryptedLine =
                   decrypter.decrypt(Encrypted.fromBase64(lines[i]), iv: iv);
 
-              // Suddividi la riga in componenti separate
               List<String> components = decryptedLine.split(', ');
 
-              // Crea un'attività da quelle componenti
               Activity activity = Activity(
                 title: components[0],
                 date: components[1],
@@ -166,7 +162,6 @@ class Login extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Registration button logic
                       toReg(_userNameController.text, _userPwdController.text);
                     },
                     child: Text('Register'),
@@ -174,7 +169,6 @@ class Login extends StatelessWidget {
                   SizedBox(width: 16),
                   ElevatedButton(
                     onPressed: () {
-                      // Login button logic
                       toLog(_userNameController.text, _userPwdController.text);
                     },
                     child: Text('Login'),

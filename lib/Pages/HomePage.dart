@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart' hide Key;
 import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Pages/ActivitiesPage.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_tracker_application/Pages/Home.dart';
 import 'package:flutter_tracker_application/Pages/StatisticsPage.dart';
 import 'package:provider/provider.dart';
 import 'package:encrypt/encrypt.dart';
+import 'package:flutter_tracker_application/Models/Utilities.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -21,16 +21,6 @@ class HomePage extends StatefulWidget {
       required this.iv,
       required this.activities});
 
-  String padKey(String key) {
-    if (key.length > 32) {
-      return key.substring(
-          0, 32); // Se la chiave è più lunga di 32 caratteri, troncala
-    } else {
-      return key.padRight(32,
-          '.'); // Altrimenti, aggiungi '.' alla fine fino a raggiungere 32 caratteri
-    }
-  }
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -42,16 +32,6 @@ class _HomePageState extends State<HomePage> {
   IV get iv => widget.iv;
   List<Activity> get activities => widget.activities;
 
-  String padKey(String key) {
-    if (key.length > 32) {
-      return key.substring(
-          0, 32); // Se la chiave è più lunga di 32 caratteri, troncala
-    } else {
-      return key.padRight(32,
-          '.'); // Altrimenti, aggiungi '.' alla fine fino a raggiungere 32 caratteri
-    }
-  }
-
   void handleLogout() async {
     final activitiesProvider =
         Provider.of<ActivitiesProvider>(context, listen: false);
@@ -61,15 +41,13 @@ class _HomePageState extends State<HomePage> {
     if (username != 'admin') {
       final currentDirectory = Directory.current.path;
       final file = File('$currentDirectory/lib/Models/Users/$username.txt');
-      final key = Key.fromUtf8(padKey(password));
+      final key = Key.fromUtf8(Utility.padKey(password));
       final encrypter = Encrypter(AES(key));
 
       final encryptedPassword = encrypter.encrypt(password, iv: iv);
 
-      // Scrivi l'IV e la password criptata nel file
       await file.writeAsString('${iv.base64}\n${encryptedPassword.base64}\n');
 
-      // Cripta e scrivi ogni attività
       for (var activity in activitiesProvider.activities) {
         final encryptedActivity = encrypter.encrypt(
           activity.toString(),
@@ -87,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     Future.delayed(Duration.zero, () {
       // aspetta che il widget sia costruito ritardando la funzione
       pageProvider.selectedIndex = 0;
-    }); // porta alla pagina di login
+    });
   }
 
   @override
@@ -195,49 +173,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-/*
-Future<String> _determineIP() async {
-    final responseIp = await http.get(Uri.parse('https://api.ipify.org'));
-    if (responseIp.statusCode == 200) {
-      return responseIp.body;
-    } else {
-      print(responseIp.statusCode);
-      return 'error';
-    }
-  }
-
-  Future<List<String>> _determineLoc(String ip) async {
-    final responseLoc = await http.get(Uri.parse(
-        'https://api.ipgeolocation.io/ipgeo?apiKey=3053e1109ad84501acd6ed29471d2ccb&ip=$ip'));
-    if (responseLoc.statusCode == 200) {
-      String loc = responseLoc.body;
-      //print(loc);
-
-      Map<String, dynamic> map = json.decode(loc);
-      print(map['city']);
-      print(map['latitude']);
-      print(map['longitude']);
-
-      return [map['city'], map['latitude'], map['longitude']];
-    } else {
-      print(responseLoc.statusCode);
-      return ['error'];
-    }
-  }
-
-  Future<int> _determineCond(String lat, String lon) async {
-    final responseWeather = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=42e97e9acd8667854d957907b52ea325&units=metric'));
-
-    if (responseWeather.statusCode == 200) {
-      String weather = responseWeather.body;
-      Map<String, dynamic> map = json.decode(weather);
-      print(map['weather'][0]['id']);
-      return map['weather'][0]['id'];
-    } else {
-      print(responseWeather.statusCode);
-      return -1;
-    }
-  }
-*/

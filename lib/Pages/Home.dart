@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Widgets/DigitalClock.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_tracker_application/Models/Utilities.dart';
 
 class Home extends StatefulWidget {
   final String username;
@@ -15,69 +16,23 @@ class _HomeState extends State<Home> {
   var style =
       TextStyle(fontSize: 30, color: Colors.blue, fontWeight: FontWeight.bold);
 
-  String _getWeatherIcon(int condition) {
-    if (condition < 300 && condition >= 0) {
-      return '🌩';
-    } else if (condition < 400) {
-      return '🌧';
-    } else if (condition < 600) {
-      return '☔️';
-    } else if (condition < 700) {
-      return '☃️';
-    } else if (condition < 800) {
-      return '🌫';
-    } else if (condition == 800) {
-      return '☀️';
-    } else if (condition <= 804) {
-      return '☁️';
-    } else {
-      return '🤷‍';
-    }
-  }
-
-  String _getTempMessage(double temp) {
-    if (temp > 25) {
-      return 'It\'s 🍦 time';
-    } else if (temp > 20) {
-      return 'Time for shorts and 👕';
-    } else if (temp < 10) {
-      return 'You\'ll need 🧣 and 🧤';
-    } else {
-      return 'Bring a 🧥 just in case';
-    }
-  }
-
   Future<List<String>> _determineIP() async {
     final responseIp = await http.get(Uri.parse('https://api.ipify.org'));
     if (responseIp.statusCode == 200) {
       String ip = responseIp.body;
-      print(ip);
 
       final responseLoc = await http.get(Uri.parse(
           'https://api.ipgeolocation.io/ipgeo?apiKey=3053e1109ad84501acd6ed29471d2ccb&ip=$ip'));
       if (responseLoc.statusCode == 200) {
         String loc = responseLoc.body;
-        //print(loc);
-
         Map<String, dynamic> map = json.decode(loc);
-
-        // print(map['latitude']);
-        //print(map['longitude']);
 
         final responseWeather = await http.get(Uri.parse(
             'https://api.openweathermap.org/data/2.5/weather?lat=${map['latitude']}&lon=${map['longitude']}&appid=42e97e9acd8667854d957907b52ea325&units=metric'));
 
         if (responseWeather.statusCode == 200) {
           String weather = responseWeather.body;
-          //  print(weather);
-
           Map<String, dynamic> mapWeather = json.decode(weather);
-          /*
-          print(mapWeather['main']['temp']);
-          print(mapWeather['weather'][0]['id']);
-          print(map['city']);*/
-          print(mapWeather['weather'][0]['main']);
-          print(mapWeather['weather'][0]['description']);
 
           return [
             map['city'].toString(),
@@ -129,7 +84,7 @@ class _HomeState extends State<Home> {
                       Card(
                         child: Container(
                           margin: EdgeInsets.all(10),
-                          child: Text('${city}', style: style),
+                          child: Text(city, style: style),
                         ),
                       ),
                       Card(
@@ -137,17 +92,15 @@ class _HomeState extends State<Home> {
                             borderRadius: BorderRadius.circular(50)),
                         child: Container(
                           margin: EdgeInsets.all(10),
-
-                          child: DigitalClock(), //Text('Hour', style: style),
+                          child: DigitalClock(),
                         ),
                       ),
                       Card(
-                        child: Container(
+                        child: SizedBox(
                           width: 100,
-                          //margin: EdgeInsets.all(10),
                           child: Center(
                             child: Text(
-                                _getWeatherIcon(
+                                Utility.getWeatherIcon(
                                   int.parse(cond),
                                 ),
                                 style: TextStyle(fontSize: 50)),
@@ -169,7 +122,7 @@ class _HomeState extends State<Home> {
                           width: MediaQuery.of(context).size.width / 4,
                           margin: EdgeInsets.all(10),
                           child: Center(
-                              child: Text('Hello ${username}!', style: style)),
+                              child: Text('Hello $username!', style: style)),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -185,14 +138,14 @@ class _HomeState extends State<Home> {
                               child: Column(
                             children: [
                               SizedBox(height: 20),
-                              Text('${temp}°C',
+                              Text('$temp°C',
                                   style: TextStyle(
                                       fontSize: 50,
                                       color: double.parse(temp) > 20
                                           ? Colors.red
                                           : Colors.blue,
                                       fontWeight: FontWeight.bold)),
-                              Text(_getTempMessage(double.parse(temp)),
+                              Text(Utility.getTempMessage(double.parse(temp)),
                                   style: TextStyle(fontSize: 20)),
                             ],
                           )),
@@ -205,7 +158,7 @@ class _HomeState extends State<Home> {
             return Text("${snapshot.error}");
           } else {
             return Center(
-                child: Container(
+                child: SizedBox(
                     height: MediaQuery.of(context).size.height / 4,
                     width: MediaQuery.of(context).size.width / 6,
                     child: CircularProgressIndicator(
