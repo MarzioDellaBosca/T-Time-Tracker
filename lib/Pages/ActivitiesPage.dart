@@ -3,6 +3,7 @@ import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_tracker_application/Models/Utilities.dart';
+import 'package:intl/intl.dart';
 
 class ActivitiesPage extends StatefulWidget {
   final List<Activity> activities;
@@ -77,10 +78,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
     if (duration.isEmpty) duration = '0';
     if (description.isEmpty) description = 'No description';
 
-    if (!RegExp(r'^\d{2}/\d{2}/\d{2}$').hasMatch(date)) {
-      // Se la data non è nel formato corretto, mostra un AlertDialog
-      Utility.errorDiag('Incorrect date format. Must be dd/mm/yy.', context);
-    } else if (Utility.isNotValidDuration(duration)) {
+    if (Utility.isNotValidDuration(duration)) {
       Utility.errorDiag('Incorrect duration format. Must be hh.', context);
     } else {
       Activity newActivity = Activity(
@@ -172,10 +170,11 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                       child: Column(
                         children: [
                           Container(
-                            height: 60.0,
+                            height: 80.0,
                             width: double.infinity,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
                                   child: TextField(
@@ -187,26 +186,65 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
+                                SizedBox(
+                                  width: 10,
+                                ),
                                 Expanded(
-                                  child: Align(
-                                    alignment: Alignment.topCenter,
+                                  child: Container(
+                                    //padding: EdgeInsets.only(top: 20),
+                                    child: TextField(
+                                      controller: durationController,
+                                      decoration: InputDecoration(
+                                          labelText: 'Duration',
+                                          helperStyle:
+                                              TextStyle(color: Colors.grey)),
+                                      style: TextStyle(fontSize: 10),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            height: 60.0,
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(2000),
+                                        lastDate: DateTime(2100),
+                                      ).then((date) {
+                                        if (date != null) {
+                                          dateController.text =
+                                              DateFormat('dd/MM/yy')
+                                                  .format(date);
+                                        }
+                                      });
+                                    },
+                                    child: Text('Date'),
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Container(
+                                    height: 32.0,
                                     child: ElevatedButton(
                                       onPressed: () => {},
-                                      style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius
-                                              .zero, // make the button rectangular
-                                        ),
-                                      ),
                                       child: DropdownButton<String>(
                                         hint: Text('Type',
                                             style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black87)),
+                                                color: Theme.of(context)
+                                                    .primaryColorDark,
+                                                fontWeight: FontWeight.w600)),
                                         value: activityType,
-                                        /*icon: const Icon(
-                                            Icons.skateboarding_outlined),
-                                        iconSize: 24,*/
                                         elevation: 15,
                                         style: const TextStyle(
                                             color: Colors.deepPurple),
@@ -233,41 +271,6 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                         }).toList(),
                                       ),
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            height: 60.0,
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    controller: dateController,
-                                    decoration: InputDecoration(
-                                        labelText: 'Date',
-                                        helperText: 'dd/mm/yy',
-                                        helperStyle:
-                                            TextStyle(color: Colors.grey)),
-                                    style: TextStyle(fontSize: 10),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: TextField(
-                                    controller: durationController,
-                                    decoration: InputDecoration(
-                                        labelText: 'Duration',
-                                        helperText: 'hh',
-                                        helperStyle:
-                                            TextStyle(color: Colors.grey)),
-                                    style: TextStyle(fontSize: 10),
-                                    textAlign: TextAlign.center,
                                   ),
                                 )
                               ],

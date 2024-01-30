@@ -10,7 +10,7 @@ class DigitalClock extends StatefulWidget {
 class _DigitalClockState extends State<DigitalClock> {
   String getSystemTime() {
     var now = new DateTime.now();
-    return DateFormat("H:m").format(now);
+    return DateFormat("H:mm").format(now);
   }
 
   @override

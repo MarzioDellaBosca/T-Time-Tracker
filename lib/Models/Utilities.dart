@@ -27,13 +27,8 @@ class Utility {
   }
 
   static String padKey(String key) {
-    if (key.length > 32) {
-      return key.substring(
-          0, 32); // Se la chiave è più lunga di 32 caratteri, troncala
-    } else {
-      return key.padRight(32,
-          '.'); // Altrimenti, aggiungi '.' alla fine fino a raggiungere 32 caratteri
-    }
+    return key.padRight(32,
+        '.'); // Altrimenti, aggiungi '.' alla fine fino a raggiungere 32 caratteri
   }
 
   static bool isNotValidDuration(String dur) {

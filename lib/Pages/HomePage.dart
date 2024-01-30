@@ -33,38 +33,45 @@ class _HomePageState extends State<HomePage> {
   List<Activity> get activities => widget.activities;
 
   void handleLogout() async {
-    final activitiesProvider =
-        Provider.of<ActivitiesProvider>(context, listen: false);
-    final pageProvider = Provider.of<PageIndexProvider>(context, listen: false);
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // aspetta che il widget sia costruito prima di operare su userProvider
+      final activitiesProvider =
+          Provider.of<ActivitiesProvider>(context, listen: false);
+      final pageProvider =
+          Provider.of<PageIndexProvider>(context, listen: false);
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    if (username != 'admin') {
-      final currentDirectory = Directory.current.path;
-      final file = File('$currentDirectory/lib/Models/Users/$username.txt');
-      final key = Key.fromUtf8(Utility.padKey(password));
-      final encrypter = Encrypter(AES(key));
+      if (username != 'admin') {
+        final currentDirectory = Directory.current.path;
+        final file = File('$currentDirectory/lib/Models/Users/$username.txt');
+        final key = Key.fromUtf8(Utility.padKey(password));
+        final encrypter = Encrypter(AES(key));
 
-      final encryptedPassword = encrypter.encrypt(password, iv: iv);
+        final encryptedPassword = encrypter.encrypt(password, iv: iv);
 
-      await file.writeAsString('${iv.base64}\n${encryptedPassword.base64}\n');
+        await file.writeAsString('${iv.base64}\n${encryptedPassword.base64}\n');
 
-      for (var activity in activitiesProvider.activities) {
-        final encryptedActivity = encrypter.encrypt(
-          activity.toString(),
-          iv: iv,
-        );
-        await file.writeAsString('${encryptedActivity.base64}\n',
-            mode: FileMode.append);
+        for (var activity in activitiesProvider.activities) {
+          final encryptedActivity = encrypter.encrypt(
+            activity.toString(),
+            iv: iv,
+          );
+          await file.writeAsString('${encryptedActivity.base64}\n',
+              mode: FileMode.append);
+        }
+        userProvider.iv = IV.fromLength(16);
       }
-    }
-    activitiesProvider.resetActivities();
-    userProvider.username = '';
-    userProvider.password = '';
-    userProvider.iv = IV.fromLength(16);
+      if (activitiesProvider.activities.isNotEmpty) {
+        activitiesProvider.resetActivities();
+      }
 
-    Future.delayed(Duration.zero, () {
-      // aspetta che il widget sia costruito ritardando la funzione
-      pageProvider.selectedIndex = 0;
+      userProvider.username = '';
+      userProvider.password = '';
+
+      Future.delayed(Duration.zero, () {
+        // aspetta che il widget sia costruito ritardando la funzione
+        pageProvider.selectedIndex = 0;
+      });
     });
   }
 

@@ -25,6 +25,9 @@ class Login extends StatelessWidget {
       if (username == 'admin' && password == 'admin') {
         _userNameController.clear();
         _userPwdController.clear();
+        userProvider.username = username;
+        userProvider.password = password;
+        userProvider.iv = IV.fromLength(16);
         pageProvider.selectedIndex = 1;
       } else if (!File('$currentDirectory/lib/Models/Users/$username.txt')
           .existsSync()) {
