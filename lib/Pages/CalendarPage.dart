@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Activity.dart';
+import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:flutter_tracker_application/Widgets/ActivityDescription.dart';
 import 'package:flutter_tracker_application/Widgets/Calendar.dart';
 import 'package:intl/intl.dart';
 
 class CalendarPage extends StatefulWidget {
   final List<Activity> activities;
-  CalendarPage({required this.activities});
+  final imgProvider;
+  CalendarPage({required this.activities, required this.imgProvider});
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
@@ -14,6 +16,7 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   List<Activity> get activities => widget.activities;
+  ImgProvider get imgProvider => widget.imgProvider;
   DateTime? _selectedDay;
   Activity? selectedActivity;
 
@@ -39,7 +42,13 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        color: Colors.deepPurple.shade50,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(imgProvider
+                .imgPath), // sostituisci con il tuo percorso di immagine
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           children: [
             MyCalendar(
@@ -60,13 +69,23 @@ class _CalendarPageState extends State<CalendarPage> {
                   children: [
                     Container(
                       height: 40,
-                      child: Text(
-                        "Activities:",
-                        style: TextStyle(
-                          color: Colors.deepPurple,
-                          fontSize: 24, // Imposta la dimensione del font
-                          fontWeight:
-                              FontWeight.bold, // Imposta il peso del font
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Container(
+                          height: 50,
+                          width: 130,
+                          child: Center(
+                            child: Text(
+                              "Activities:",
+                              style: TextStyle(
+                                color: Colors.deepPurple,
+                                fontSize: 24, // Imposta la dimensione del font
+                                fontWeight:
+                                    FontWeight.bold, // Imposta il peso del font
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),

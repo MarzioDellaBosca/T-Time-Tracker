@@ -4,6 +4,7 @@ import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Pages/ActivitiesPage.dart';
 import 'package:flutter_tracker_application/Pages/CalendarPage.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
+import 'package:flutter_tracker_application/Pages/HelpPage.dart';
 import 'package:flutter_tracker_application/Pages/Home.dart';
 import 'package:flutter_tracker_application/Pages/SettingsPage.dart';
 import 'package:flutter_tracker_application/Pages/StatisticsPage.dart';
@@ -70,7 +71,6 @@ class _HomePageState extends State<HomePage> {
       userProvider.password = '';
 
       Future.delayed(Duration.zero, () {
-        // aspetta che il widget sia costruito ritardando la funzione
         pageProvider.selectedIndex = 0;
       });
     });
@@ -80,27 +80,37 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var activitiesProvider = Provider.of<ActivitiesProvider>(context);
     var userProvider = Provider.of<UserProvider>(context);
+    var imgProvider = Provider.of<ImgProvider>(context);
     Widget page = const Placeholder();
-    print(username);
 
     switch (selectedIndex) {
       case 0:
-        page = Home(username: username);
+        page = Home(
+          username: username,
+          imgProvider: imgProvider,
+        );
         break;
       case 1:
-        page = ActivitiesPage(activities: activitiesProvider.activities);
+        page = ActivitiesPage(
+            activities: activitiesProvider.activities,
+            imgProvider: imgProvider);
         break;
       case 2:
-        page = StatisticsPage(activities: activitiesProvider.activities);
+        page = StatisticsPage(
+            activities: activitiesProvider.activities,
+            imgProvider: imgProvider);
         break;
       case 3:
-        page = CalendarPage(activities: activitiesProvider.activities);
+        page = CalendarPage(
+            activities: activitiesProvider.activities,
+            imgProvider: imgProvider);
         break;
       case 4:
-        page = SettingsPage(userProvider: userProvider);
+        page =
+            SettingsPage(userProvider: userProvider, imgProvider: imgProvider);
         break;
       case 5:
-        page = const Placeholder();
+        page = HelpPage(imgProvider: imgProvider);
         break;
       case 6:
         handleLogout();

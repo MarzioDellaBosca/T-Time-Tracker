@@ -21,6 +21,7 @@ class Login extends StatelessWidget {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final pageProvider =
           Provider.of<PageIndexProvider>(context, listen: false);
+      final imgProvider = Provider.of<ImgProvider>(context, listen: false);
 
       if (username == 'admin' && password == 'admin') {
         _userNameController.clear();
@@ -69,6 +70,7 @@ class Login extends StatelessWidget {
             userProvider.username = username;
             userProvider.password = password;
             userProvider.iv = iv;
+            imgProvider.imgPath = '1';
             pageProvider.selectedIndex = 1;
           } else {
             Utility.errorDiag('Wrong password!', context);
@@ -90,6 +92,7 @@ class Login extends StatelessWidget {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final pageProvider =
           Provider.of<PageIndexProvider>(context, listen: false);
+      final imgProvider = Provider.of<ImgProvider>(context, listen: false);
 
       if (file.existsSync()) {
         Utility.errorDiag('A user with this username already exists.', context);
@@ -117,6 +120,7 @@ class Login extends StatelessWidget {
         userProvider.username = username;
         userProvider.password = password;
         userProvider.iv = iv;
+        imgProvider.imgPath = '1';
         pageProvider.selectedIndex = 1;
       }
     }

@@ -48,6 +48,7 @@ class _MyCalendarState extends State<MyCalendar> {
             margin: const EdgeInsets.all(2.0),
             padding: const EdgeInsets.all(5.0),
             decoration: BoxDecoration(
+              color: Colors.deepPurple[50], // Imposta il colore desiderato
               border: Border.all(color: Colors.blueGrey),
             ),
             child: Center(
@@ -56,7 +57,6 @@ class _MyCalendarState extends State<MyCalendar> {
                 children: [
                   Container(
                     width: 30,
-                    //alignment: Alignment.center,
                     child: date.day.toString().length == 1
                         ? Text(
                             '  ${date.day}',

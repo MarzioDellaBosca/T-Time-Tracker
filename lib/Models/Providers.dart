@@ -29,7 +29,6 @@ class ActivitiesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //index, titleController.text, dateController.text, durationController.text, descriptionController.text, activityType
   void modifyActivity(int index, String title, String date, String duration,
       String description, String activityType) {
     if (title.isNotEmpty) {
@@ -92,6 +91,17 @@ class UserProvider extends ChangeNotifier {
 
   set iv(IV newIv) {
     _iv = newIv;
+    notifyListeners();
+  }
+}
+
+class ImgProvider extends ChangeNotifier {
+  String _imgPath = '';
+
+  String get imgPath => _imgPath;
+
+  set imgPath(String imgN) {
+    _imgPath = "assets/images/img$imgN.jpg";
     notifyListeners();
   }
 }

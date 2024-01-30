@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_tracker_application/Models/Providers.dart';
 
 class StatisticsPage extends StatefulWidget {
   final List<Activity> activities;
-  StatisticsPage({required this.activities});
+  final imgProvider;
+  StatisticsPage({required this.activities, required this.imgProvider});
 
   @override
   State<StatisticsPage> createState() => _StatisticsPageState();
@@ -12,6 +14,7 @@ class StatisticsPage extends StatefulWidget {
 
 class _StatisticsPageState extends State<StatisticsPage> {
   List<Activity> get activities => widget.activities;
+  ImgProvider get imgProvider => widget.imgProvider;
 
   List<Activity> _seriesForOtherCat = [];
   List<Activity> _seriesForSportCat = [];
@@ -81,136 +84,145 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Card(
-            child: Container(
-          width: 500,
-          child: Center(
-            child: Text(
-              'Total Activities stats:',
-              style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.blue, // Cambia il colore del testo
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-        )),
-        Container(
-          width: 500,
-          child: Card(
-            child: Column(
-              children: [
-                // Legenda
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(10)),
-                      width: 20,
-                      height: 20,
-                    ),
-                    SizedBox(width: 8), // Spazio tra il box e il testo
-                    Text('Other'),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(10)),
-                      width: 20,
-                      height: 20,
-                    ),
-                    SizedBox(width: 8), // Spazio tra il box e il testo
-                    Text('Sport'),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(10)),
-                      width: 20,
-                      height: 20,
-                    ),
-                    SizedBox(width: 8), // Spazio tra il box e il testo
-                    Text('Study'),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.yellow,
-                          borderRadius: BorderRadius.circular(10)),
-                      width: 20,
-                      height: 20,
-                    ),
-                    SizedBox(width: 8), // Spazio tra il box e il testo
-                    Text('Work'),
-                  ],
-                ),
-              ],
-            ),
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(imgProvider
+              .imgPath), // sostituisci con il tuo percorso di immagine
+          fit: BoxFit.cover,
         ),
-        Container(
-          width: 500,
-          height: 400,
-          child: Card(
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: PieChart(
-                PieChartData(
-                  sectionsSpace: 5,
-                  sections: [
-                    PieChartSectionData(
-                        title:
-                            '${(_hoursForOtherCat / _totHours * 100).round()}%',
-                        value: _hoursForOtherCat,
-                        color: Colors.red),
-                    PieChartSectionData(
-                        title:
-                            '${(_hoursForSportCat / _totHours * 100).round()}%',
-                        value: _hoursForSportCat,
-                        color: Colors.green),
-                    PieChartSectionData(
-                        title:
-                            '${(_hoursForStudyCat / _totHours * 100).round()}%',
-                        value: _hoursForStudyCat,
-                        color: Colors.blue),
-                    PieChartSectionData(
-                        title:
-                            '${(_hoursForWorkCat / _totHours * 100).round()}%',
-                        value: _hoursForWorkCat,
-                        color: Colors.yellow),
-                    PieChartSectionData(
-                        title: '',
-                        value: _seriesForWorkCat.isNotEmpty ||
-                                _seriesForOtherCat.isNotEmpty ||
-                                _seriesForSportCat.isNotEmpty ||
-                                _seriesForStudyCat.isNotEmpty
-                            ? 0
-                            : 100,
-                        color: Colors.orange),
-                  ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Card(
+              child: Container(
+            width: 500,
+            child: Center(
+              child: Text(
+                'Total Activities stats:',
+                style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.blue, // Cambia il colore del testo
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          )),
+          Container(
+            width: 500,
+            child: Card(
+              child: Column(
+                children: [
+                  // Legenda
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(10)),
+                        width: 20,
+                        height: 20,
+                      ),
+                      SizedBox(width: 8), // Spazio tra il box e il testo
+                      Text('Other'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(10)),
+                        width: 20,
+                        height: 20,
+                      ),
+                      SizedBox(width: 8), // Spazio tra il box e il testo
+                      Text('Sport'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(10)),
+                        width: 20,
+                        height: 20,
+                      ),
+                      SizedBox(width: 8), // Spazio tra il box e il testo
+                      Text('Study'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.yellow,
+                            borderRadius: BorderRadius.circular(10)),
+                        width: 20,
+                        height: 20,
+                      ),
+                      SizedBox(width: 8), // Spazio tra il box e il testo
+                      Text('Work'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            width: 500,
+            height: 400,
+            child: Card(
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: PieChart(
+                  PieChartData(
+                    sectionsSpace: 5,
+                    sections: [
+                      PieChartSectionData(
+                          title:
+                              '${(_hoursForOtherCat / _totHours * 100).round()}%',
+                          value: _hoursForOtherCat,
+                          color: Colors.red),
+                      PieChartSectionData(
+                          title:
+                              '${(_hoursForSportCat / _totHours * 100).round()}%',
+                          value: _hoursForSportCat,
+                          color: Colors.green),
+                      PieChartSectionData(
+                          title:
+                              '${(_hoursForStudyCat / _totHours * 100).round()}%',
+                          value: _hoursForStudyCat,
+                          color: Colors.blue),
+                      PieChartSectionData(
+                          title:
+                              '${(_hoursForWorkCat / _totHours * 100).round()}%',
+                          value: _hoursForWorkCat,
+                          color: Colors.yellow),
+                      PieChartSectionData(
+                          title: '',
+                          value: _seriesForWorkCat.isNotEmpty ||
+                                  _seriesForOtherCat.isNotEmpty ||
+                                  _seriesForSportCat.isNotEmpty ||
+                                  _seriesForStudyCat.isNotEmpty
+                              ? 0
+                              : 100,
+                          color: Colors.orange),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        // Il tuo grafico va qui...
-      ],
+          // Il tuo grafico va qui...
+        ],
+      ),
     );
   }
 }

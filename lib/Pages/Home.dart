@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:flutter_tracker_application/Widgets/DigitalClock.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -6,13 +7,15 @@ import 'package:flutter_tracker_application/Models/Utilities.dart';
 
 class Home extends StatefulWidget {
   final String username;
-  Home({required this.username});
+  final imgProvider;
+  Home({required this.username, required this.imgProvider});
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   String get username => widget.username;
+  ImgProvider get imgProvider => widget.imgProvider;
   var style =
       TextStyle(fontSize: 30, color: Colors.blue, fontWeight: FontWeight.bold);
 
@@ -73,86 +76,95 @@ class _HomeState extends State<Home> {
             String city = snapshot.data![0];
             String temp = snapshot.data![1];
             String cond = snapshot.data![2];
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Card(
-                        child: Container(
-                          margin: EdgeInsets.all(10),
-                          child: Text(city, style: style),
-                        ),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Container(
-                          margin: EdgeInsets.all(10),
-                          child: DigitalClock(),
-                        ),
-                      ),
-                      Card(
-                        child: SizedBox(
-                          width: 100,
-                          child: Center(
-                            child: Text(
-                                Utility.getWeatherIcon(
-                                  int.parse(cond),
-                                ),
-                                style: TextStyle(fontSize: 50)),
+            return Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(imgProvider
+                      .imgPath), // sostituisci con il tuo percorso di immagine
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Card(
+                          child: Container(
+                            margin: EdgeInsets.all(10),
+                            child: Text(city, style: style),
                           ),
                         ),
-                      ),
-                    ]),
-                Expanded(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                      Card(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                              borderRadius: BorderRadius.circular(10)),
-                          height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width / 4,
-                          margin: EdgeInsets.all(10),
-                          child: Center(
-                              child: Text('Hello $username!', style: style)),
+                        Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Container(
+                            margin: EdgeInsets.all(10),
+                            child: DigitalClock(),
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 10),
-                      Card(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                              borderRadius: BorderRadius.circular(10)),
-                          height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width / 4,
-                          margin: EdgeInsets.all(10),
-                          child: Center(
-                              child: Column(
-                            children: [
-                              SizedBox(height: 20),
-                              Text('$temp°C',
-                                  style: TextStyle(
-                                      fontSize: 50,
-                                      color: double.parse(temp) > 20
-                                          ? Colors.red
-                                          : Colors.blue,
-                                      fontWeight: FontWeight.bold)),
-                              Text(Utility.getTempMessage(double.parse(temp)),
-                                  style: TextStyle(fontSize: 20)),
-                            ],
-                          )),
+                        Card(
+                          child: SizedBox(
+                            width: 100,
+                            child: Center(
+                              child: Text(
+                                  Utility.getWeatherIcon(
+                                    int.parse(cond),
+                                  ),
+                                  style: TextStyle(fontSize: 50)),
+                            ),
+                          ),
                         ),
-                      ),
-                    ]))
-              ],
+                      ]),
+                  Expanded(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                        Card(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(10)),
+                            height: MediaQuery.of(context).size.height / 4,
+                            width: MediaQuery.of(context).size.width / 4,
+                            margin: EdgeInsets.all(10),
+                            child: Center(
+                                child: Text('Hello $username!', style: style)),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Card(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(10)),
+                            height: MediaQuery.of(context).size.height / 4,
+                            width: MediaQuery.of(context).size.width / 4,
+                            margin: EdgeInsets.all(10),
+                            child: Center(
+                                child: Column(
+                              children: [
+                                SizedBox(height: 20),
+                                Text('$temp°C',
+                                    style: TextStyle(
+                                        fontSize: 50,
+                                        color: double.parse(temp) > 20
+                                            ? Colors.red
+                                            : Colors.blue,
+                                        fontWeight: FontWeight.bold)),
+                                Text(Utility.getTempMessage(double.parse(temp)),
+                                    style: TextStyle(fontSize: 20)),
+                              ],
+                            )),
+                          ),
+                        ),
+                      ]))
+                ],
+              ),
             );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
