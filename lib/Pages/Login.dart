@@ -91,7 +91,7 @@ class Login extends StatelessWidget {
       final pageProvider =
           Provider.of<PageIndexProvider>(context, listen: false);
 
-      if (await file.exists()) {
+      if (file.existsSync()) {
         Utility.errorDiag('A user with this username already exists.', context);
         _userNameController.clear();
       } else if (username == 'admin') {

@@ -5,6 +5,7 @@ import 'package:flutter_tracker_application/Pages/ActivitiesPage.dart';
 import 'package:flutter_tracker_application/Pages/CalendarPage.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:flutter_tracker_application/Pages/Home.dart';
+import 'package:flutter_tracker_application/Pages/SettingsPage.dart';
 import 'package:flutter_tracker_application/Pages/StatisticsPage.dart';
 import 'package:provider/provider.dart';
 import 'package:encrypt/encrypt.dart';
@@ -78,6 +79,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var activitiesProvider = Provider.of<ActivitiesProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     Widget page = const Placeholder();
     print(username);
 
@@ -95,7 +97,7 @@ class _HomePageState extends State<HomePage> {
         page = CalendarPage(activities: activitiesProvider.activities);
         break;
       case 4:
-        page = const Placeholder();
+        page = SettingsPage(userProvider: userProvider);
         break;
       case 5:
         page = const Placeholder();

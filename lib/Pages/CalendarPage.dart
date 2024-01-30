@@ -37,11 +37,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    //var activitiesForSelectedDay = _activitiesForSelectedDay();
-    //final theme = Theme.of(context);
-    /*final style = theme.textTheme.displaySmall!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );*/
     return Center(
       child: Container(
         color: Colors.deepPurple.shade50,

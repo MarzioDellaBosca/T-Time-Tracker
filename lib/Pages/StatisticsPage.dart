@@ -86,12 +86,17 @@ class _StatisticsPageState extends State<StatisticsPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Card(
+            child: Container(
+          width: 500,
+          child: Center(
             child: Text(
-          'Total Activities stats:',
-          style: TextStyle(
-              fontSize: 30,
-              color: Colors.blue, // Cambia il colore del testo
-              fontWeight: FontWeight.bold),
+              'Total Activities stats:',
+              style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.blue, // Cambia il colore del testo
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
         )),
         Container(
           width: 500,
