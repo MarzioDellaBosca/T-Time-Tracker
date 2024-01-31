@@ -86,7 +86,7 @@ class HelpPage extends StatelessWidget {
                             child: Container(
                                 margin: EdgeInsets.all(10),
                                 child: Text(
-                                    'In the settings section, you will be able to modify your username and password. Additionally, you can change the theme of the entire application',
+                                    'In the settings section, you will be able to modify your username and password. Additionally, you can change the theme of the entire application!',
                                     style: style))))),
               ],
             ),

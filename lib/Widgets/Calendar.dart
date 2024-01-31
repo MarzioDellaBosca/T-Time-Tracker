@@ -85,8 +85,8 @@ class _MyCalendarState extends State<MyCalendar> {
                         child: Icon(
                           Icons.star,
                           size: 25, // Mostra un'icona se ci sono eventi
-                          color:
-                              Colors.deepPurple, // Cambia il colore dell'icona
+                          color: Colors
+                              .blue.shade900, // Cambia il colore dell'icona
                         ),
                       ),
                     ),

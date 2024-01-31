@@ -4,10 +4,14 @@ import 'package:flutter_tracker_application/Pages/HomePage.dart';
 import 'package:flutter_tracker_application/Pages/Login.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  WindowManager.instance.setResizable(false);
+  if (!kIsWeb) {
+    WindowManager.instance.setResizable(false);
+  }
+
   runApp(const MainApp());
 }
 
@@ -31,7 +35,21 @@ class MainApp extends StatelessWidget {
             seedColor: Colors.blue.shade900,
           ),
         ),
-        home: MyHomePage(),
+        home: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: constraints.maxWidth,
+                  minHeight: constraints.maxHeight,
+                ),
+                child: IntrinsicHeight(
+                  child: MyHomePage(),
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -76,6 +94,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'T Tracker',
+          style: TextStyle(color: Colors.white60, fontSize: 25),
+        ), // Cambia il titolo qui
+        backgroundColor: Colors.blue.shade900, // Cambia il colore qui
+      ),
       body: Container(
         child: page,
       ),

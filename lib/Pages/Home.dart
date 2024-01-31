@@ -114,7 +114,7 @@ class _HomeState extends State<Home> {
                                   Utility.getWeatherIcon(
                                     int.parse(cond),
                                   ),
-                                  style: TextStyle(fontSize: 50)),
+                                  style: TextStyle(fontSize: 40)),
                             ),
                           ),
                         ),

@@ -128,34 +128,38 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
         children: [
           Expanded(
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Activities:", style: style),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: activities.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: ListTile(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(activities[index]
-                                    .getTitle()), // Titolo a sinistra
-                                Text(activities[index]
-                                    .getDate()), // Data a destra
-                              ],
+              child: FocusScope(
+                node: FocusScopeNode(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Activities:", style: style),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: activities.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(activities[index]
+                                      .getTitle()), // Titolo a sinistra
+                                  Text(activities[index]
+                                      .getDate()), // Data a destra
+                                ],
+                              ),
+                              onTap: () {
+                                selectActivity(activities[index]);
+                              },
                             ),
-                            onTap: () {
-                              selectActivity(activities[index]);
-                            },
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -174,258 +178,271 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                           border: Border.all(color: Colors.black),
                           color: Colors.white70,
                         ),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 80.0,
-                              width: double.infinity,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      controller: titleController,
-                                      decoration: InputDecoration(
-                                        labelText: 'Title',
-                                      ),
-                                      style: TextStyle(fontSize: 10),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      //padding: EdgeInsets.only(top: 20),
+                        child: FocusScope(
+                          node: FocusScopeNode(),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 80.0,
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(
                                       child: TextField(
-                                        controller: durationController,
+                                        controller: titleController,
                                         decoration: InputDecoration(
-                                            labelText: 'Duration',
-                                            helperStyle:
-                                                TextStyle(color: Colors.grey)),
+                                          labelText: 'Title',
+                                        ),
                                         style: TextStyle(fontSize: 10),
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              height: 60.0,
-                              width: double.infinity,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2000),
-                                          lastDate: DateTime(2100),
-                                        ).then((date) {
-                                          if (date != null) {
-                                            dateController.text =
-                                                DateFormat('dd/MM/yy')
-                                                    .format(date);
-                                          }
-                                        });
-                                      },
-                                      child: Text('Date'),
+                                    SizedBox(
+                                      width: 10,
                                     ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Expanded(
-                                    child: Container(
-                                      height: 32.0,
-                                      child: ElevatedButton(
-                                        onPressed: () => {},
-                                        child: DropdownButton<String>(
-                                          hint: Text('Type',
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .primaryColorDark,
-                                                  fontWeight: FontWeight.w600)),
-                                          value: activityType,
-                                          elevation: 15,
-                                          style: const TextStyle(
-                                              color: Colors.deepPurple),
-                                          underline: Container(
-                                            height: 0,
-                                            color: Colors.deepPurpleAccent,
-                                          ),
-                                          onChanged: (String? newValue) {
-                                            setState(() {
-                                              activityType = newValue;
-                                            });
-                                          },
-                                          items: <String>[
-                                            'Work',
-                                            'Sport',
-                                            'Study',
-                                            'Other'
-                                          ].map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList(),
+                                    Expanded(
+                                      child: Container(
+                                        //padding: EdgeInsets.only(top: 20),
+                                        child: TextField(
+                                          controller: durationController,
+                                          decoration: InputDecoration(
+                                              labelText: 'Duration',
+                                              helperStyle: TextStyle(
+                                                  color: Colors.grey)),
+                                          style: TextStyle(fontSize: 10),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Container(
+                                height: 60.0,
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(2000),
+                                            lastDate: DateTime(2100),
+                                          ).then((date) {
+                                            if (date != null) {
+                                              dateController.text =
+                                                  DateFormat('dd/MM/yy')
+                                                      .format(date);
+                                            }
+                                          });
+                                        },
+                                        child: Text('Date'),
+                                      ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            TextField(
-                              controller: descriptionController,
-                              decoration: InputDecoration(
-                                labelText: 'Description',
-                                border: UnderlineInputBorder(),
-                              ),
-                              style: TextStyle(fontSize: 10),
-                              textAlign: TextAlign.center,
-                              minLines: 1,
-                              maxLines: 4,
-                            ),
-                            SizedBox(height: 10),
-                            Center(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  addActivity();
-                                },
-                                child: Text('Add'),
-                              ),
-                            ),
-                            if (selectedActivity != null)
-                              Expanded(
-                                child: FractionallySizedBox(
-                                  widthFactor: 1.0, // Occupa tutta la larghezza
-                                  child: Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              RichText(
-                                                text: TextSpan(
-                                                  text: 'Title: ',
-                                                  style: DefaultTextStyle.of(
-                                                          context)
-                                                      .style
-                                                      .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                        text: selectedActivity!
-                                                            .getTitle(),
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal)),
-                                                  ],
-                                                ),
-                                              ),
-                                              RichText(
-                                                text: TextSpan(
-                                                  text: 'Date: ',
-                                                  style: DefaultTextStyle.of(
-                                                          context)
-                                                      .style
-                                                      .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                        text: selectedActivity!
-                                                            .getDate(),
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal)),
-                                                  ],
-                                                ),
-                                              ),
-                                              RichText(
-                                                text: TextSpan(
-                                                  text: 'Duration: ',
-                                                  style: DefaultTextStyle.of(
-                                                          context)
-                                                      .style
-                                                      .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                        text:
-                                                            '${selectedActivity!.getDuration()} h',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal)),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Description:',
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: Container(
+                                        height: 32.0,
+                                        child: ElevatedButton(
+                                          onPressed: () => {},
+                                          child: DropdownButton<String>(
+                                            hint: Text('Type',
                                                 style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .primaryColorDark,
                                                     fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              RichText(
-                                                text: TextSpan(
-                                                  text: 'Type: ',
-                                                  style: DefaultTextStyle.of(
-                                                          context)
-                                                      .style
-                                                      .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                        text: selectedActivity!
-                                                            .getCategory(),
-                                                        style: TextStyle(
+                                                        FontWeight.w600)),
+                                            value: activityType,
+                                            elevation: 15,
+                                            style: const TextStyle(
+                                                color: Colors.deepPurple),
+                                            underline: Container(
+                                              height: 0,
+                                              color: Colors.deepPurpleAccent,
+                                            ),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                activityType = newValue;
+                                              });
+                                            },
+                                            items: <String>[
+                                              'Work',
+                                              'Sport',
+                                              'Study',
+                                              'Other'
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              TextField(
+                                controller: descriptionController,
+                                decoration: InputDecoration(
+                                  labelText: 'Description',
+                                  border: UnderlineInputBorder(),
+                                ),
+                                style: TextStyle(fontSize: 10),
+                                textAlign: TextAlign.center,
+                                minLines: 1,
+                                maxLines: 4,
+                              ),
+                              SizedBox(height: 10),
+                              Center(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    addActivity();
+                                  },
+                                  child: Text('Add'),
+                                ),
+                              ),
+                              if (selectedActivity != null)
+                                Expanded(
+                                  child: FractionallySizedBox(
+                                    widthFactor:
+                                        1.0, // Occupa tutta la larghezza
+                                    child: Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                RichText(
+                                                  text: TextSpan(
+                                                    text: 'Title: ',
+                                                    style: DefaultTextStyle.of(
+                                                            context)
+                                                        .style
+                                                        .copyWith(
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .normal)),
-                                                  ],
+                                                                    .bold),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                          text:
+                                                              selectedActivity!
+                                                                  .getTitle(),
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal)),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 5),
-                                          Text(selectedActivity!
-                                              .getDescription()),
-                                        ],
+                                                RichText(
+                                                  text: TextSpan(
+                                                    text: 'Date: ',
+                                                    style: DefaultTextStyle.of(
+                                                            context)
+                                                        .style
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                          text:
+                                                              selectedActivity!
+                                                                  .getDate(),
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal)),
+                                                    ],
+                                                  ),
+                                                ),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    text: 'Duration: ',
+                                                    style: DefaultTextStyle.of(
+                                                            context)
+                                                        .style
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                          text:
+                                                              '${selectedActivity!.getDuration()} h',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Description:',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    text: 'Type: ',
+                                                    style: DefaultTextStyle.of(
+                                                            context)
+                                                        .style
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                          text: selectedActivity!
+                                                              .getCategory(),
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text(selectedActivity!
+                                                .getDescription()),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

@@ -79,7 +79,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             child: Text(
                               "Activities:",
                               style: TextStyle(
-                                color: Colors.deepPurple,
+                                color: Colors.blue.shade900,
                                 fontSize: 24, // Imposta la dimensione del font
                                 fontWeight:
                                     FontWeight.bold, // Imposta il peso del font

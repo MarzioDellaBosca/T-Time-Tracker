@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart' hide Key;
 import 'package:flutter_tracker_application/Models/Activity.dart';
+import 'package:flutter_tracker_application/Models/UserDataHandler.dart';
 import 'package:flutter_tracker_application/Pages/ActivitiesPage.dart';
 import 'package:flutter_tracker_application/Pages/CalendarPage.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_tracker_application/Pages/StatisticsPage.dart';
 import 'package:provider/provider.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_tracker_application/Models/Utilities.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -44,23 +46,35 @@ class _HomePageState extends State<HomePage> {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
 
       if (username != 'admin') {
-        final currentDirectory = Directory.current.path;
-        final file = File('$currentDirectory/lib/Models/Users/$username.txt');
-        final key = Key.fromUtf8(Utility.padKey(password));
-        final encrypter = Encrypter(AES(key));
+        if (!kIsWeb) {
+          final currentDirectory = Directory.current.path;
+          final file = File('$currentDirectory/lib/Models/Users/$username.txt');
+          final key = Key.fromUtf8(Utility.padKey(password));
+          final encrypter = Encrypter(AES(key));
 
-        final encryptedPassword = encrypter.encrypt(password, iv: iv);
+          final encryptedPassword = encrypter.encrypt(password, iv: iv);
 
-        await file.writeAsString('${iv.base64}\n${encryptedPassword.base64}\n');
+          await file
+              .writeAsString('${iv.base64}\n${encryptedPassword.base64}\n');
 
-        for (var activity in activitiesProvider.activities) {
-          final encryptedActivity = encrypter.encrypt(
-            activity.toString(),
-            iv: iv,
+          for (var activity in activitiesProvider.activities) {
+            final encryptedActivity = encrypter.encrypt(
+              activity.toString(),
+              iv: iv,
+            );
+            await file.writeAsString('${encryptedActivity.base64}\n',
+                mode: FileMode.append);
+          }
+        } else {
+          UserDataHandler.deleteUserData(username);
+          UserDataHandler.saveUserData(
+            username,
+            password,
+            iv,
+            activitiesProvider.activities,
           );
-          await file.writeAsString('${encryptedActivity.base64}\n',
-              mode: FileMode.append);
         }
+
         userProvider.iv = IV.fromLength(16);
       }
       if (activitiesProvider.activities.isNotEmpty) {
@@ -121,9 +135,6 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('T_Tracker'),
-      ),
       body: Row(
         children: [
           SafeArea(
