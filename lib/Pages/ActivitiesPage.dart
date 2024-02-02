@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
+import 'package:flutter_tracker_application/Widgets/ActivityDescription.dart';
+import 'package:flutter_tracker_application/Widgets/ActivityListView.dart';
+import 'package:flutter_tracker_application/Widgets/MyDropDownButton.dart';
+import 'package:flutter_tracker_application/Widgets/MyInputTextField.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_tracker_application/Models/Utilities.dart';
 import 'package:intl/intl.dart';
@@ -135,27 +139,9 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                   children: [
                     Text("Activities:", style: style),
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: activities.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(activities[index]
-                                      .getTitle()), // Titolo a sinistra
-                                  Text(activities[index]
-                                      .getDate()), // Data a destra
-                                ],
-                              ),
-                              onTap: () {
-                                selectActivity(activities[index]);
-                              },
-                            ),
-                          );
-                        },
+                      child: ActivityListView(
+                        activities: activities,
+                        selectActivity: selectActivity,
                       ),
                     ),
                   ],
@@ -191,30 +177,20 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Expanded(
-                                      child: TextField(
+                                      child: MyInputTextField(
                                         controller: titleController,
-                                        decoration: InputDecoration(
-                                          labelText: 'Title',
-                                        ),
-                                        style: TextStyle(fontSize: 10),
-                                        textAlign: TextAlign.center,
+                                        label: 'Title',
+                                        type: 1,
                                       ),
                                     ),
                                     SizedBox(
                                       width: 10,
                                     ),
                                     Expanded(
-                                      child: Container(
-                                        //padding: EdgeInsets.only(top: 20),
-                                        child: TextField(
-                                          controller: durationController,
-                                          decoration: InputDecoration(
-                                              labelText: 'Duration',
-                                              helperStyle: TextStyle(
-                                                  color: Colors.grey)),
-                                          style: TextStyle(fontSize: 10),
-                                          textAlign: TextAlign.center,
-                                        ),
+                                      child: MyInputTextField(
+                                        controller: durationController,
+                                        label: 'Duration',
+                                        type: 1,
                                       ),
                                     )
                                   ],
@@ -250,8 +226,21 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                     SizedBox(width: 10),
                                     Expanded(
                                       child: Container(
-                                        height: 32.0,
-                                        child: ElevatedButton(
+                                          height: 32.0,
+                                          child: MyDropDownButtor(
+                                              type: 1,
+                                              value: activityType,
+                                              hint: Text('Type',
+                                                  style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                              items: items,
+                                              onChanged: onChanged)
+
+                                          /*
+                                        ElevatedButton(
                                           onPressed: () => {},
                                           child: DropdownButton<String>(
                                             hint: Text('Type',
@@ -286,24 +275,17 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                               );
                                             }).toList(),
                                           ),
-                                        ),
-                                      ),
+                                        ),*/
+                                          ),
                                     )
                                   ],
                                 ),
                               ),
                               SizedBox(height: 10),
-                              TextField(
-                                controller: descriptionController,
-                                decoration: InputDecoration(
-                                  labelText: 'Description',
-                                  border: UnderlineInputBorder(),
-                                ),
-                                style: TextStyle(fontSize: 10),
-                                textAlign: TextAlign.center,
-                                minLines: 1,
-                                maxLines: 4,
-                              ),
+                              MyInputTextField(
+                                  controller: descriptionController,
+                                  type: 2,
+                                  label: 'Description'),
                               SizedBox(height: 10),
                               Center(
                                 child: ElevatedButton(
@@ -314,133 +296,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                 ),
                               ),
                               if (selectedActivity != null)
-                                Expanded(
-                                  child: FractionallySizedBox(
-                                    widthFactor:
-                                        1.0, // Occupa tutta la larghezza
-                                    child: Card(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                RichText(
-                                                  text: TextSpan(
-                                                    text: 'Title: ',
-                                                    style: DefaultTextStyle.of(
-                                                            context)
-                                                        .style
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                          text:
-                                                              selectedActivity!
-                                                                  .getTitle(),
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                    ],
-                                                  ),
-                                                ),
-                                                RichText(
-                                                  text: TextSpan(
-                                                    text: 'Date: ',
-                                                    style: DefaultTextStyle.of(
-                                                            context)
-                                                        .style
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                          text:
-                                                              selectedActivity!
-                                                                  .getDate(),
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                    ],
-                                                  ),
-                                                ),
-                                                RichText(
-                                                  text: TextSpan(
-                                                    text: 'Duration: ',
-                                                    style: DefaultTextStyle.of(
-                                                            context)
-                                                        .style
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                          text:
-                                                              '${selectedActivity!.getDuration()} h',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 10),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Description:',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                RichText(
-                                                  text: TextSpan(
-                                                    text: 'Type: ',
-                                                    style: DefaultTextStyle.of(
-                                                            context)
-                                                        .style
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                          text: selectedActivity!
-                                                              .getCategory(),
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 5),
-                                            Text(selectedActivity!
-                                                .getDescription()),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                ActivityDescription(activity: selectedActivity!)
                             ],
                           ),
                         ),
@@ -451,11 +307,6 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                   FractionallySizedBox(
                     widthFactor: 1.0, // Occupa tutta la larghezza disponibile
                     child: Container(
-                      /*  padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        color: Colors.white70,
-                      ),*/
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

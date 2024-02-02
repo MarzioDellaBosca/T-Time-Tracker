@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Activity.dart';
 
-class ActivityDescription extends StatefulWidget {
+class ActivityDescription extends StatelessWidget {
   final Activity activity;
 
   ActivityDescription({required this.activity});
 
   @override
-  _ActivityDescriptionState createState() => _ActivityDescriptionState();
-}
-
-class _ActivityDescriptionState extends State<ActivityDescription> {
-  @override
   Widget build(BuildContext context) {
     return Expanded(
       child: FractionallySizedBox(
-        widthFactor: 1.0, // Occupa tutta la larghezza
-        //heightFactor: 0.8, // Occupa tutta l'altezza
+        widthFactor: 1.0,
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -34,7 +28,7 @@ class _ActivityDescriptionState extends State<ActivityDescription> {
                             .copyWith(fontWeight: FontWeight.bold),
                         children: <TextSpan>[
                           TextSpan(
-                              text: widget.activity.getTitle(),
+                              text: activity.getTitle(),
                               style: TextStyle(fontWeight: FontWeight.normal)),
                         ],
                       ),
@@ -47,7 +41,7 @@ class _ActivityDescriptionState extends State<ActivityDescription> {
                             .copyWith(fontWeight: FontWeight.bold),
                         children: <TextSpan>[
                           TextSpan(
-                              text: widget.activity.getDate(),
+                              text: activity.getDate(),
                               style: TextStyle(fontWeight: FontWeight.normal)),
                         ],
                       ),
@@ -60,7 +54,7 @@ class _ActivityDescriptionState extends State<ActivityDescription> {
                             .copyWith(fontWeight: FontWeight.bold),
                         children: <TextSpan>[
                           TextSpan(
-                              text: '${widget.activity.getDuration()} h',
+                              text: '${activity.getDuration()} h',
                               style: TextStyle(fontWeight: FontWeight.normal)),
                         ],
                       ),
@@ -83,7 +77,7 @@ class _ActivityDescriptionState extends State<ActivityDescription> {
                             .copyWith(fontWeight: FontWeight.bold),
                         children: <TextSpan>[
                           TextSpan(
-                              text: widget.activity.getCategory(),
+                              text: activity.getCategory(),
                               style: TextStyle(fontWeight: FontWeight.normal)),
                         ],
                       ),
@@ -91,7 +85,7 @@ class _ActivityDescriptionState extends State<ActivityDescription> {
                   ],
                 ),
                 SizedBox(height: 5),
-                Text(widget.activity.getDescription()),
+                Text(activity.getDescription()),
               ],
             ),
           ),

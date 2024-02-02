@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:flutter_tracker_application/Widgets/DigitalClock.dart';
+import 'package:flutter_tracker_application/Widgets/MyCard.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_tracker_application/Models/Utilities.dart';
@@ -124,18 +125,7 @@ class _HomeState extends State<Home> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                        Card(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                borderRadius: BorderRadius.circular(10)),
-                            height: MediaQuery.of(context).size.height / 4,
-                            width: MediaQuery.of(context).size.width / 4,
-                            margin: EdgeInsets.all(10),
-                            child: Center(
-                                child: Text('Hello $username!', style: style)),
-                          ),
-                        ),
+                        MyCard(text: 'Hello $username!', style: style),
                         SizedBox(width: 10),
                         Card(
                           child: Container(

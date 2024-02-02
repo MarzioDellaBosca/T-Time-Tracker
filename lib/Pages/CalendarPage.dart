@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:flutter_tracker_application/Widgets/ActivityDescription.dart';
+import 'package:flutter_tracker_application/Widgets/ActivityListView.dart';
 import 'package:flutter_tracker_application/Widgets/Calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -90,32 +91,12 @@ class _CalendarPageState extends State<CalendarPage> {
                       ),
                     ),
                     Container(
-                      width: 400,
-                      height: 180, // Imposta la larghezza desiderata
-                      child: ListView.builder(
-                        itemCount: _activitiesForSelectedDay().length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(_activitiesForSelectedDay()[index]
-                                      .getTitle()), // Titolo a sinistra
-                                  Text(_activitiesForSelectedDay()[index]
-                                      .getDate()), // Data a destra
-                                ],
-                              ),
-                              onTap: () {
-                                selectActivity(
-                                    _activitiesForSelectedDay()[index]);
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                        width: 400,
+                        height: 180, // Imposta la larghezza desiderata
+                        child: ActivityListView(
+                          activities: _activitiesForSelectedDay(),
+                          selectActivity: selectActivity,
+                        )),
                   ],
                 ),
                 SizedBox(width: 30),
