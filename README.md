@@ -66,10 +66,10 @@ Tranne per le pagine di login, statistiche e aiuto, le altre pagine sono tutte i
 ### Bibliografia
 Ci tengo a includere tutti i siti in cui ho trovato risorse:
 
-Per API acquisizione IP: <a href="https://app.ipgeolocation.io/"></a> 
-Per API acquisizione condizioni meteo: <a href="https://openweathermap.org/api/one-call-3"></a> 
+Per API acquisizione IP: <a href="https://app.ipgeolocation.io/">IP Geolocation</a> 
+Per API acquisizione condizioni meteo: <a href="https://openweathermap.org/api/one-call-3">OpenWeather map</a> 
 
-Per Immagini applicazioni:
+Per Immagini applicazione:
 - <a href="https://unsplash.com/it/@sandrokatalina?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Sandro Katalina</a> 
 - <a href="https://unsplash.com/it/@vincentiu?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Vincentiu Solomon</a>
 - <a href="https://unsplash.com/it/@beckerworks?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">David Becker</a> 
