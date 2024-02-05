@@ -46,11 +46,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       int index = activitiesProvider.activities.indexOf(selectedActivity!);
 
       if (index != -1) {
-        if (dateController.text.isNotEmpty &&
-            !RegExp(r'^\d{2}/\d{2}/\d{2}$').hasMatch(dateController.text)) {
-          Utility.errorDiag(
-              'Incorrect date format. Must be dd/mm/yy.', context);
-        } else if (durationController.text.isNotEmpty &&
+        if (durationController.text.isNotEmpty &&
             Utility.isNotValidDuration(durationController.text)) {
           Utility.errorDiag('Incorrect duration format. Must be hh.', context);
         } else {
@@ -85,6 +81,8 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
     if (Utility.isNotValidDuration(duration)) {
       Utility.errorDiag('Incorrect duration format. Must be hh.', context);
+    } else if (date.isEmpty) {
+      Utility.errorDiag('You have to chose a date!', context);
     } else {
       Activity newActivity = Activity(
           title: title,
@@ -235,7 +233,11 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                               ],
                                               onChanged: (String? newValue) {
                                                 setState(() {
-                                                  activityType = newValue;
+                                                  if (newValue != null)
+                                                    activityType = newValue;
+                                                  else {
+                                                    activityType = 'Other';
+                                                  }
                                                 });
                                               })),
                                     )

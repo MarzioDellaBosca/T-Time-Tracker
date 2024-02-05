@@ -1,89 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Activity.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_tracker_application/Models/Providers.dart';
 
-class StatisticsPage extends StatefulWidget {
+class StatisticsPage extends StatelessWidget {
   final List<Activity> activities;
   final imgProvider;
   StatisticsPage({required this.activities, required this.imgProvider});
 
-  @override
-  State<StatisticsPage> createState() => _StatisticsPageState();
-}
-
-class _StatisticsPageState extends State<StatisticsPage> {
-  List<Activity> get activities => widget.activities;
-  ImgProvider get imgProvider => widget.imgProvider;
-
-  List<Activity> _seriesForOtherCat = [];
-  List<Activity> _seriesForSportCat = [];
-  List<Activity> _seriesForStudyCat = [];
-  List<Activity> _seriesForWorkCat = [];
-
-  double _hoursForOtherCat = 0;
-  double _hoursForSportCat = 0;
-  double _hoursForStudyCat = 0;
-  double _hoursForWorkCat = 0;
-
-  double _totHours = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    _seriesForOtherCat = _createSeriesForCategory('Other', 0, 'default');
-    _seriesForSportCat = _createSeriesForCategory('Sport', 0, 'default');
-    _seriesForStudyCat = _createSeriesForCategory('Study', 0, 'default');
-    _seriesForWorkCat = _createSeriesForCategory('Work', 0, 'default');
-
-    _hoursForOtherCat = _seriesForOtherCat.isNotEmpty
-        ? _seriesForOtherCat
-            .map((activity) => activity.getDuration().toDouble())
-            .reduce((a, b) => a + b)
-        : 0;
-    _hoursForSportCat = _seriesForSportCat.isNotEmpty
-        ? _seriesForSportCat
-            .map((activity) => activity.getDuration().toDouble())
-            .reduce((a, b) => a + b)
-        : 0;
-    _hoursForStudyCat = _seriesForStudyCat.isNotEmpty
-        ? _seriesForStudyCat
-            .map((activity) => activity.getDuration().toDouble())
-            .reduce((a, b) => a + b)
-        : 0;
-    _hoursForWorkCat = _seriesForWorkCat.isNotEmpty
-        ? _seriesForWorkCat
-            .map((activity) => activity.getDuration().toDouble())
-            .reduce((a, b) => a + b)
-        : 0;
-
-    _totHours = _hoursForOtherCat +
-                _hoursForSportCat +
-                _hoursForStudyCat +
-                _hoursForWorkCat >
-            0
-        ? _hoursForOtherCat +
-            _hoursForSportCat +
-            _hoursForStudyCat +
-            _hoursForWorkCat
-        : 1;
-  }
-
-  List<Activity> _createSeriesForCategory(
-      String category, int ctrl, String date) {
+  List<Activity> _createSeriesForCategory(String category, String date) {
     return [
       for (var activity in activities)
-        if (ctrl == 0)
-          if (activity.getCategory() == category)
-            activity
-          else if (ctrl == 1)
-            if (activity.getCategory() == category &&
-                activity.getDate() == date)
-              activity
+        if (activity.getCategory() == category) activity
     ];
   }
 
+  double _getHoursForCategory(List<Activity> series) {
+    return series.isNotEmpty
+        ? series
+            .map((activity) => activity.getDuration().toDouble())
+            .reduce((a, b) => a + b)
+        : 0;
+  }
+
   Widget build(BuildContext context) {
+    List<Activity> seriesForOtherCat =
+        _createSeriesForCategory('Other', 'default');
+    List<Activity> seriesForSportCat =
+        _createSeriesForCategory('Sport', 'default');
+    List<Activity> seriesForStudyCat =
+        _createSeriesForCategory('Study', 'default');
+    List<Activity> seriesForWorkCat =
+        _createSeriesForCategory('Work', 'default');
+
+    double hoursForOtherCat = _getHoursForCategory(seriesForOtherCat);
+    double hoursForSportCat = _getHoursForCategory(seriesForSportCat);
+    double hoursForStudyCat = _getHoursForCategory(seriesForStudyCat);
+    double hoursForWorkCat = _getHoursForCategory(seriesForWorkCat);
+
+    double totHours = hoursForOtherCat +
+                hoursForSportCat +
+                hoursForStudyCat +
+                hoursForWorkCat >
+            0
+        ? hoursForOtherCat +
+            hoursForSportCat +
+            hoursForStudyCat +
+            hoursForWorkCat
+        : 1;
+
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -186,30 +150,30 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     sections: [
                       PieChartSectionData(
                           title:
-                              '${(_hoursForOtherCat / _totHours * 100).round()}%',
-                          value: _hoursForOtherCat,
+                              '${(hoursForOtherCat / totHours * 100).round()}%',
+                          value: hoursForOtherCat,
                           color: Colors.red),
                       PieChartSectionData(
                           title:
-                              '${(_hoursForSportCat / _totHours * 100).round()}%',
-                          value: _hoursForSportCat,
+                              '${(hoursForSportCat / totHours * 100).round()}%',
+                          value: hoursForSportCat,
                           color: Colors.green),
                       PieChartSectionData(
                           title:
-                              '${(_hoursForStudyCat / _totHours * 100).round()}%',
-                          value: _hoursForStudyCat,
+                              '${(hoursForStudyCat / totHours * 100).round()}%',
+                          value: hoursForStudyCat,
                           color: Colors.blue),
                       PieChartSectionData(
                           title:
-                              '${(_hoursForWorkCat / _totHours * 100).round()}%',
-                          value: _hoursForWorkCat,
+                              '${(hoursForWorkCat / totHours * 100).round()}%',
+                          value: hoursForWorkCat,
                           color: Colors.yellow),
                       PieChartSectionData(
                           title: '',
-                          value: _seriesForWorkCat.isNotEmpty ||
-                                  _seriesForOtherCat.isNotEmpty ||
-                                  _seriesForSportCat.isNotEmpty ||
-                                  _seriesForStudyCat.isNotEmpty
+                          value: seriesForWorkCat.isNotEmpty ||
+                                  seriesForOtherCat.isNotEmpty ||
+                                  seriesForSportCat.isNotEmpty ||
+                                  seriesForStudyCat.isNotEmpty
                               ? 0
                               : 100,
                           color: Colors.orange),
