@@ -67,6 +67,7 @@ Tranne per le pagine di login, statistiche e aiuto, le altre pagine sono tutte i
 Ci tengo a includere tutti i siti in cui ho trovato risorse:
 
 Per API acquisizione IP: <a href="https://app.ipgeolocation.io/">IP Geolocation</a> 
+
 Per API acquisizione condizioni meteo: <a href="https://openweathermap.org/api/one-call-3">OpenWeather map</a> 
 
 Per Immagini applicazione:
