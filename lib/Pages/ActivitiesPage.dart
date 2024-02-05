@@ -101,8 +101,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       descriptionController.clear();
       durationController.clear();
       setState(() {
-        activityType =
-            null; // o 'Type' se 'Type' è un'opzione nel tuo DropdownButton
+        activityType = null;
       });
     }
   }
@@ -123,8 +122,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(imgProvider
-              .imgPath), // sostituisci con il tuo percorso di immagine
+          image: AssetImage(imgProvider.imgPath),
           fit: BoxFit.cover,
         ),
       ),
@@ -149,7 +147,6 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
               ),
             ),
           ),
-          // La tua colonna esistente
           Expanded(
             child: Center(
               child: Column(
@@ -157,7 +154,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                 children: [
                   Expanded(
                     child: FractionallySizedBox(
-                      widthFactor: 1.0, // Occupa tutta la larghezza disponibile
+                      widthFactor: 1.0,
                       child: Container(
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
@@ -228,55 +225,19 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                       child: Container(
                                           height: 32.0,
                                           child: MyDropDownButtor(
-                                              type: 1,
                                               value: activityType,
-                                              hint: Text('Type',
-                                                  style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .primaryColorDark,
-                                                      fontWeight:
-                                                          FontWeight.w600)),
-                                              items: items,
-                                              onChanged: onChanged)
-
-                                          /*
-                                        ElevatedButton(
-                                          onPressed: () => {},
-                                          child: DropdownButton<String>(
-                                            hint: Text('Type',
-                                                style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .primaryColorDark,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            value: activityType,
-                                            elevation: 15,
-                                            style: const TextStyle(
-                                                color: Colors.deepPurple),
-                                            underline: Container(
-                                              height: 0,
-                                              color: Colors.deepPurpleAccent,
-                                            ),
-                                            onChanged: (String? newValue) {
-                                              setState(() {
-                                                activityType = newValue;
-                                              });
-                                            },
-                                            items: <String>[
-                                              'Work',
-                                              'Sport',
-                                              'Study',
-                                              'Other'
-                                            ].map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value,
-                                                child: Text(value),
-                                              );
-                                            }).toList(),
-                                          ),
-                                        ),*/
-                                          ),
+                                              hint: 'Type',
+                                              items: <String>[
+                                                'Work',
+                                                'Sport',
+                                                'Study',
+                                                'Other'
+                                              ],
+                                              onChanged: (String? newValue) {
+                                                setState(() {
+                                                  activityType = newValue;
+                                                });
+                                              })),
                                     )
                                   ],
                                 ),
@@ -305,7 +266,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                   ),
                   SizedBox(height: 10),
                   FractionallySizedBox(
-                    widthFactor: 1.0, // Occupa tutta la larghezza disponibile
+                    widthFactor: 1.0,
                     child: Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

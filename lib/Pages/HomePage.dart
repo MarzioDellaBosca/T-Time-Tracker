@@ -95,6 +95,7 @@ class _HomePageState extends State<HomePage> {
     var activitiesProvider = Provider.of<ActivitiesProvider>(context);
     var userProvider = Provider.of<UserProvider>(context);
     var imgProvider = Provider.of<ImgProvider>(context);
+    double width = MediaQuery.of(context).size.width;
     Widget page = const Placeholder();
 
     switch (selectedIndex) {
@@ -139,18 +140,19 @@ class _HomePageState extends State<HomePage> {
         children: [
           SafeArea(
             child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.2,
+              width:
+                  width > 850 ? MediaQuery.of(context).size.width * 0.2 : 100,
               child: NavigationRail(
                 backgroundColor: Colors.blueGrey.shade100,
-                extended: true,
+                extended: width > 900 ? true : false,
                 leading: Column(
                   children: [
-                    SizedBox(height: 20), // Aggiungi spazio sopra
+                    SizedBox(height: 20),
                   ],
                 ),
                 trailing: Column(
                   children: [
-                    SizedBox(height: 20), // Aggiungi spazio sotto
+                    SizedBox(height: 20),
                   ],
                 ),
                 destinations: [

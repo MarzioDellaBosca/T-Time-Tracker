@@ -87,8 +87,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(imgProvider
-              .imgPath), // sostituisci con il tuo percorso di immagine
+          image: AssetImage(imgProvider.imgPath),
           fit: BoxFit.cover,
         ),
       ),
@@ -104,7 +103,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 'Total Activities stats:',
                 style: TextStyle(
                     fontSize: 30,
-                    color: Colors.blue, // Cambia il colore del testo
+                    color: Colors.blue,
                     fontWeight: FontWeight.bold),
               ),
             ),
@@ -125,7 +124,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         width: 20,
                         height: 20,
                       ),
-                      SizedBox(width: 8), // Spazio tra il box e il testo
+                      SizedBox(width: 8),
                       Text('Other'),
                     ],
                   ),
@@ -139,7 +138,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         width: 20,
                         height: 20,
                       ),
-                      SizedBox(width: 8), // Spazio tra il box e il testo
+                      SizedBox(width: 8),
                       Text('Sport'),
                     ],
                   ),
@@ -153,7 +152,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         width: 20,
                         height: 20,
                       ),
-                      SizedBox(width: 8), // Spazio tra il box e il testo
+                      SizedBox(width: 8),
                       Text('Study'),
                     ],
                   ),
@@ -167,7 +166,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         width: 20,
                         height: 20,
                       ),
-                      SizedBox(width: 8), // Spazio tra il box e il testo
+                      SizedBox(width: 8),
                       Text('Work'),
                     ],
                   ),
@@ -220,7 +219,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
               ),
             ),
           ),
-          // Il tuo grafico va qui...
         ],
       ),
     );

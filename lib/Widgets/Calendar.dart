@@ -33,7 +33,6 @@ class _MyCalendarState extends State<MyCalendar> {
         _events[date]!.add(activity.getTitle());
       }
     }
-    //print(_events);
 
     return TableCalendar(
       firstDay: DateTime.utc(2020, 10, 16),
@@ -48,7 +47,7 @@ class _MyCalendarState extends State<MyCalendar> {
             margin: const EdgeInsets.all(2.0),
             padding: const EdgeInsets.all(5.0),
             decoration: BoxDecoration(
-              color: Colors.deepPurple[50], // Imposta il colore desiderato
+              color: Colors.deepPurple[50],
               border: Border.all(color: Colors.blueGrey),
             ),
             child: Center(
@@ -79,14 +78,13 @@ class _MyCalendarState extends State<MyCalendar> {
                   ),
                   if (todayEvents.isNotEmpty)
                     Positioned(
-                      bottom: 0, // Posiziona l'icona in basso
+                      bottom: 0,
                       child: Opacity(
-                        opacity: 0.7, // Imposta l'opacità al 50%
+                        opacity: 0.7,
                         child: Icon(
                           Icons.star,
-                          size: 25, // Mostra un'icona se ci sono eventi
-                          color: Colors
-                              .blue.shade900, // Cambia il colore dell'icona
+                          size: 25,
+                          color: Colors.blue.shade900,
                         ),
                       ),
                     ),
@@ -100,14 +98,13 @@ class _MyCalendarState extends State<MyCalendar> {
             margin: const EdgeInsets.all(2.0),
             padding: const EdgeInsets.all(5.0),
             decoration: BoxDecoration(
-              color: Colors.deepPurple, // Imposta il colore desiderato
+              color: Colors.deepPurple,
               border: Border.all(color: Colors.blueGrey),
             ),
             child: Center(
               child: Text(
                 '${date.day}',
-                style: TextStyle(
-                    color: Colors.white), // Imposta il colore del testo
+                style: TextStyle(color: Colors.white),
               ),
             ),
           );

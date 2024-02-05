@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:flutter_tracker_application/Widgets/DigitalClock.dart';
+import 'package:flutter_tracker_application/Widgets/MarginHandler.dart';
 import 'package:flutter_tracker_application/Widgets/MyCard.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -121,38 +122,25 @@ class _HomeState extends State<Home> {
                         ),
                       ]),
                   Expanded(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                        MyCard(text: 'Hello $username!', style: style),
-                        SizedBox(width: 10),
-                        Card(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                borderRadius: BorderRadius.circular(10)),
-                            height: MediaQuery.of(context).size.height / 4,
-                            width: MediaQuery.of(context).size.width / 4,
-                            margin: EdgeInsets.all(10),
-                            child: Center(
-                                child: Column(
-                              children: [
-                                SizedBox(height: 20),
-                                Text('$temp°C',
-                                    style: TextStyle(
-                                        fontSize: 50,
-                                        color: double.parse(temp) > 20
-                                            ? Colors.red
-                                            : Colors.blue,
-                                        fontWeight: FontWeight.bold)),
-                                Text(Utility.getTempMessage(double.parse(temp)),
-                                    style: TextStyle(fontSize: 20)),
-                              ],
-                            )),
-                          ),
-                        ),
-                      ]))
+                      child: MarginHandler(
+                    widthRange: 1000,
+                    children: [
+                      MyCard(
+                          temp: null,
+                          range: 1000,
+                          text: 'Hello $username!',
+                          style: style),
+                      SizedBox(
+                        width: 10,
+                        height: 10,
+                      ),
+                      MyCard(
+                          temp: double.parse(temp),
+                          range: 1000,
+                          text: Utility.getTempMessage(double.parse(temp)),
+                          style: style),
+                    ],
+                  )),
                 ],
               ),
             );

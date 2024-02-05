@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart'; // Importa tutto da material.dart tranne Key o conflitto con encrypt.dart
+import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/UserDataHandler.dart';
 
 class Login extends StatelessWidget {

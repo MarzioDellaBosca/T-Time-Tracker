@@ -9,7 +9,7 @@ class DigitalClock extends StatefulWidget {
 
 class _DigitalClockState extends State<DigitalClock> {
   String getSystemTime() {
-    var now = new DateTime.now();
+    var now = DateTime.now();
     return DateFormat("H:mm").format(now);
   }
 
@@ -17,7 +17,7 @@ class _DigitalClockState extends State<DigitalClock> {
   Widget build(BuildContext context) {
     return TimerBuilder.periodic(Duration(seconds: 10), builder: (context) {
       return Text(
-        "${getSystemTime()}",
+        getSystemTime(),
         style: TextStyle(
             color: Color(0xff2d386b),
             fontSize: 30,

@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
     switch (selectedIndex) {
       case 0:
         page = Login();
-        break; // Add break statement to prevent fall-through.
+        break;
       case 1:
         page = HomePage(
           username: userProvider.username,
@@ -87,10 +87,10 @@ class _MyHomePageState extends State<MyHomePage> {
           iv: userProvider.iv,
           activities: activitiesProvider.activities,
         );
-        break; // Add break statement to prevent fall-through.
+        break;
       default:
         page = const Placeholder();
-        break; // Add break statement to prevent fall-through.
+        break;
     }
 
     return Scaffold(
@@ -98,8 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(
           'T Tracker',
           style: TextStyle(color: Colors.white60, fontSize: 25),
-        ), // Cambia il titolo qui
-        backgroundColor: Colors.blue.shade900, // Cambia il colore qui
+        ),
+        backgroundColor: Colors.blue.shade900,
       ),
       body: Container(
         child: page,

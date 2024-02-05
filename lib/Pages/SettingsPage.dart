@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:flutter_tracker_application/Models/UserDataHandler.dart';
+import 'package:flutter_tracker_application/Widgets/MarginHandler.dart';
+import 'package:flutter_tracker_application/Widgets/MyDropDownButton.dart';
 
 class SettingsPage extends StatefulWidget {
   final userProvider;
@@ -32,6 +34,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -43,8 +47,9 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Center(
         child: Card(
           child: Container(
-            height: MediaQuery.of(context).size.height / 4,
-            width: MediaQuery.of(context).size.width / 4,
+            height:
+                height >= 1002 ? MediaQuery.of(context).size.height / 4 : 230,
+            width: width >= 1002 ? MediaQuery.of(context).size.width / 4 : 260,
             margin: EdgeInsets.all(10),
             child: FocusScope(
               node: FocusScopeNode(),
@@ -68,8 +73,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  MarginHandler(
+                    widthRange: 1002,
                     children: [
                       ElevatedButton(
                         onPressed: () {
@@ -77,44 +82,26 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                         child: Text('Save'),
                       ),
-                      ElevatedButton(
-                        onPressed: () => {},
-                        child: DropdownButton<String>(
-                          hint: Text('Change theme',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColorDark,
-                                  fontWeight: FontWeight.w600)),
-                          value: imgPath,
-                          elevation: 15,
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColorDark,
-                              fontWeight: FontWeight.w600),
-                          underline: Container(
-                            height: 0,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              imgPath = newValue!;
-                              imgProvider.imgPath =
-                                  imgPath!.substring(imgPath!.length - 1);
-                            });
-                          },
-                          items: <String>[
-                            'Img 1',
-                            'Img 2',
-                            'Img 3',
-                            'Img 4',
-                            'Img 5',
-                            'Img 6',
-                          ].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                      SizedBox(height: 5, width: 10),
+                      MyDropDownButtor(
+                        value: imgPath,
+                        hint: 'Change theme',
+                        items: <String>[
+                          'Img 1',
+                          'Img 2',
+                          'Img 3',
+                          'Img 4',
+                          'Img 5',
+                          'Img 6',
+                        ],
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            imgPath = newValue!;
+                            imgProvider.imgPath =
+                                imgPath!.substring(imgPath!.length - 1);
+                          });
+                        },
+                      )
                     ],
                   ),
                 ],

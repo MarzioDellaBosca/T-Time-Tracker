@@ -17,8 +17,8 @@ class ActivityListView extends StatelessWidget {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(activities[index].getTitle()), // Titolo a sinistra
-                Text(activities[index].getDate()), // Data a destra
+                Text(activities[index].getTitle()),
+                Text(activities[index].getDate()),
               ],
             ),
             onTap: () {
