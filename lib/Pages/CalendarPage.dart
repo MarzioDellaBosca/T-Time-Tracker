@@ -47,8 +47,7 @@ class _CalendarPageState extends State<CalendarPage> {
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(imgProvider
-                .imgPath), // sostituisci con il tuo percorso di immagine
+            image: AssetImage(imgProvider.imgPath),
             fit: BoxFit.cover,
           ),
         ),
@@ -90,10 +89,8 @@ class _CalendarPageState extends State<CalendarPage> {
                                           "Activities:",
                                           style: TextStyle(
                                             color: Colors.blue.shade900,
-                                            fontSize:
-                                                24, // Imposta la dimensione del font
-                                            fontWeight: FontWeight
-                                                .bold, // Imposta il peso del font
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
@@ -102,8 +99,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 ),
                                 Container(
                                     width: 400,
-                                    height:
-                                        180, // Imposta la larghezza desiderata
+                                    height: 180,
                                     child: ActivityListView(
                                       activities: _activitiesForSelectedDay(),
                                       selectActivity: selectActivity,

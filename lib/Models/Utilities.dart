@@ -27,8 +27,7 @@ class Utility {
   }
 
   static String padKey(String key) {
-    return key.padRight(32,
-        '.'); // Altrimenti, aggiungi '.' alla fine fino a raggiungere 32 caratteri
+    return key.padRight(32, '.');
   }
 
   static bool isNotValidDuration(String dur) {

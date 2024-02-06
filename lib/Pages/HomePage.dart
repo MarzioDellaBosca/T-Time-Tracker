@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> {
 
   void handleLogout() async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // aspetta che il widget sia costruito prima di operare su userProvider
       final activitiesProvider =
           Provider.of<ActivitiesProvider>(context, listen: false);
       final pageProvider =

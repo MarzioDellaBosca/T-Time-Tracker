@@ -23,9 +23,7 @@ class Login extends StatelessWidget {
     return Center(
       child: height <= 400 || width <= 270
           ? Container()
-          : // ignore: prefer_const_constructors
-
-          Container(
+          : Container(
               width: 300,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

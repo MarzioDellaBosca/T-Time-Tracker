@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_application/Models/Providers.dart';
 import 'package:flutter_tracker_application/Models/UserDataHandler.dart';
+import 'package:flutter_tracker_application/Models/Utilities.dart';
 import 'package:flutter_tracker_application/Widgets/MarginHandler.dart';
 import 'package:flutter_tracker_application/Widgets/MyDropDownButton.dart';
 
@@ -22,12 +23,22 @@ class _SettingsPageState extends State<SettingsPage> {
   String? imgPath;
 
   void handleUserChange() async {
-    UserDataHandler.handleUserChange(
-        userProvider.username,
-        _userNameController.text,
-        userProvider.password,
-        _userPwdController.text,
-        context);
+    if (_userNameController.text.isNotEmpty &&
+            _userNameController.text.length > 32 ||
+        _userPwdController.text.isNotEmpty &&
+            _userPwdController.text.length > 32) {
+      Utility.errorDiag(
+          'Username and password cannot be longer than 32 characters!',
+          context);
+    } else {
+      UserDataHandler.handleUserChange(
+          userProvider.username,
+          _userNameController.text,
+          userProvider.password,
+          _userPwdController.text,
+          context);
+    }
+
     _userNameController.clear();
     _userPwdController.clear();
   }
@@ -39,8 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(imgProvider
-              .imgPath), // sostituisci con il tuo percorso di immagine
+          image: AssetImage(imgProvider.imgPath),
           fit: BoxFit.cover,
         ),
       ),

@@ -81,8 +81,7 @@ class _HomeState extends State<Home> {
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(imgProvider
-                      .imgPath), // sostituisci con il tuo percorso di immagine
+                  image: AssetImage(imgProvider.imgPath),
                   fit: BoxFit.cover,
                 ),
               ),

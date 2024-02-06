@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart'
-    hide
-        Key; // Importa tutto da material.dart tranne Key o conflitto con encrypt.dart
+import 'package:flutter/material.dart' hide Key;
 import 'package:provider/provider.dart';
 import 'dart:io';
 import 'package:flutter_tracker_application/Models/Utilities.dart';
@@ -103,7 +101,7 @@ class UserDataHandler {
           Utility.errorDiag(
               'A user with this username already exists.', context);
         } else {
-          final iv = IV.fromSecureRandom(16); // Genera un IV casuale di 16 byte
+          final iv = IV.fromSecureRandom(16);
 
           await file.create(recursive: true);
 
