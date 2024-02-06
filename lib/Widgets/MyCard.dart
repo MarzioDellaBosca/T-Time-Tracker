@@ -28,17 +28,19 @@ class MyCard extends StatelessWidget {
                   margin: EdgeInsets.all(10),
                   child: temp == null
                       ? SingleChildScrollView(child: Text(text, style: style))
-                      : Column(
-                          children: [
-                            SizedBox(height: 20),
-                            Text('$temp°C',
-                                style: TextStyle(
-                                    fontSize: 50,
-                                    color:
-                                        temp! > 20 ? Colors.red : Colors.blue,
-                                    fontWeight: FontWeight.bold)),
-                            Text(text, style: TextStyle(fontSize: 20)),
-                          ],
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 20),
+                              Text('$temp°C',
+                                  style: TextStyle(
+                                      fontSize: 40,
+                                      color:
+                                          temp! > 20 ? Colors.red : Colors.blue,
+                                      fontWeight: FontWeight.bold)),
+                              Text(text, style: TextStyle(fontSize: 20)),
+                            ],
+                          ),
                         )),
             )));
   }

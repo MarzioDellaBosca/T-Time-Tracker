@@ -22,7 +22,9 @@ class StatisticsPage extends StatelessWidget {
         : 0;
   }
 
+  @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     List<Activity> seriesForOtherCat =
         _createSeriesForCategory('Other', 'default');
     List<Activity> seriesForSportCat =
@@ -138,51 +140,53 @@ class StatisticsPage extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: 500,
-            height: 400,
-            child: Card(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: PieChart(
-                  PieChartData(
-                    sectionsSpace: 5,
-                    sections: [
-                      PieChartSectionData(
-                          title:
-                              '${(hoursForOtherCat / totHours * 100).round()}%',
-                          value: hoursForOtherCat,
-                          color: Colors.red),
-                      PieChartSectionData(
-                          title:
-                              '${(hoursForSportCat / totHours * 100).round()}%',
-                          value: hoursForSportCat,
-                          color: Colors.green),
-                      PieChartSectionData(
-                          title:
-                              '${(hoursForStudyCat / totHours * 100).round()}%',
-                          value: hoursForStudyCat,
-                          color: Colors.blue),
-                      PieChartSectionData(
-                          title:
-                              '${(hoursForWorkCat / totHours * 100).round()}%',
-                          value: hoursForWorkCat,
-                          color: Colors.yellow),
-                      PieChartSectionData(
-                          title: '',
-                          value: seriesForWorkCat.isNotEmpty ||
-                                  seriesForOtherCat.isNotEmpty ||
-                                  seriesForSportCat.isNotEmpty ||
-                                  seriesForStudyCat.isNotEmpty
-                              ? 0
-                              : 100,
-                          color: Colors.orange),
-                    ],
+          height <= 630
+              ? Container()
+              : Container(
+                  width: 500,
+                  height: 400,
+                  child: Card(
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: PieChart(
+                        PieChartData(
+                          sectionsSpace: 5,
+                          sections: [
+                            PieChartSectionData(
+                                title:
+                                    '${(hoursForOtherCat / totHours * 100).round()}%',
+                                value: hoursForOtherCat,
+                                color: Colors.red),
+                            PieChartSectionData(
+                                title:
+                                    '${(hoursForSportCat / totHours * 100).round()}%',
+                                value: hoursForSportCat,
+                                color: Colors.green),
+                            PieChartSectionData(
+                                title:
+                                    '${(hoursForStudyCat / totHours * 100).round()}%',
+                                value: hoursForStudyCat,
+                                color: Colors.blue),
+                            PieChartSectionData(
+                                title:
+                                    '${(hoursForWorkCat / totHours * 100).round()}%',
+                                value: hoursForWorkCat,
+                                color: Colors.yellow),
+                            PieChartSectionData(
+                                title: '',
+                                value: seriesForWorkCat.isNotEmpty ||
+                                        seriesForOtherCat.isNotEmpty ||
+                                        seriesForSportCat.isNotEmpty ||
+                                        seriesForStudyCat.isNotEmpty
+                                    ? 0
+                                    : 100,
+                                color: Colors.orange),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
         ],
       ),
     );

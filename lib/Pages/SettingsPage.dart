@@ -75,6 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   SizedBox(height: 5),
                   MarginHandler(
                     widthRange: 1002,
+                    heightRange: 200,
                     children: [
                       ElevatedButton(
                         onPressed: () {

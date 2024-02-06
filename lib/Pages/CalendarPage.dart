@@ -41,6 +41,8 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Center(
       child: Container(
         decoration: BoxDecoration(
@@ -50,65 +52,74 @@ class _CalendarPageState extends State<CalendarPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          children: [
-            MyCalendar(
-                onDaySelected: (selectedDay) {
-                  setState(() {
-                    if (selectedDay != _selectedDay) {
-                      selectedActivity = null;
-                    }
-                    _selectedDay = selectedDay;
-                  });
-                },
-                activities: activities),
-            SizedBox(height: 10),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      height: 40,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Container(
-                          height: 50,
-                          width: 130,
-                          child: Center(
-                            child: Text(
-                              "Activities:",
-                              style: TextStyle(
-                                color: Colors.blue.shade900,
-                                fontSize: 24, // Imposta la dimensione del font
-                                fontWeight:
-                                    FontWeight.bold, // Imposta il peso del font
-                              ),
+        child: width <= 600
+            ? Container()
+            : Column(
+                children: [
+                  height <= 500
+                      ? Container()
+                      : MyCalendar(
+                          onDaySelected: (selectedDay) {
+                            setState(() {
+                              if (selectedDay != _selectedDay) {
+                                selectedActivity = null;
+                              }
+                              _selectedDay = selectedDay;
+                            });
+                          },
+                          activities: activities),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      height <= 650
+                          ? Container()
+                          : Column(
+                              children: [
+                                Container(
+                                  height: 40,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Container(
+                                      height: 50,
+                                      width: 130,
+                                      child: Center(
+                                        child: Text(
+                                          "Activities:",
+                                          style: TextStyle(
+                                            color: Colors.blue.shade900,
+                                            fontSize:
+                                                24, // Imposta la dimensione del font
+                                            fontWeight: FontWeight
+                                                .bold, // Imposta il peso del font
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                    width: 400,
+                                    height:
+                                        180, // Imposta la larghezza desiderata
+                                    child: ActivityListView(
+                                      activities: _activitiesForSelectedDay(),
+                                      selectActivity: selectActivity,
+                                    )),
+                              ],
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                        width: 400,
-                        height: 180, // Imposta la larghezza desiderata
-                        child: ActivityListView(
-                          activities: _activitiesForSelectedDay(),
-                          selectActivity: selectActivity,
-                        )),
-                  ],
-                ),
-                SizedBox(width: 30),
-                Container(
-                  child: selectedActivity != null
-                      ? ActivityDescription(activity: selectedActivity!)
-                      : null,
-                )
-              ],
-            ),
-          ],
-        ),
+                      SizedBox(width: 30),
+                      Container(
+                        child: selectedActivity != null
+                            ? ActivityDescription(activity: selectedActivity!)
+                            : null,
+                      )
+                    ],
+                  ),
+                ],
+              ),
       ),
     );
   }

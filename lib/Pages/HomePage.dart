@@ -96,6 +96,7 @@ class _HomePageState extends State<HomePage> {
     var userProvider = Provider.of<UserProvider>(context);
     var imgProvider = Provider.of<ImgProvider>(context);
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     Widget page = const Placeholder();
 
     switch (selectedIndex) {
@@ -135,73 +136,85 @@ class _HomePageState extends State<HomePage> {
         break;
     }
 
-    return Scaffold(
-      body: Row(
-        children: [
-          SafeArea(
-            child: SizedBox(
-              width:
-                  width > 850 ? MediaQuery.of(context).size.width * 0.2 : 100,
-              child: NavigationRail(
-                backgroundColor: Colors.blueGrey.shade100,
-                extended: width > 900 ? true : false,
-                leading: Column(
-                  children: [
-                    SizedBox(height: 20),
-                  ],
+    return height <= 300 ||
+            (height <= 350 && selectedIndex == 3) ||
+            (height <= 400 && selectedIndex == 4) ||
+            (height <= 450 && selectedIndex == 5) ||
+            (height <= 500 && selectedIndex == 6)
+        ? Container()
+        : Scaffold(
+            body: Row(
+              children: [
+                SafeArea(
+                  child: SizedBox(
+                    width: width > 850
+                        ? MediaQuery.of(context).size.width * 0.2
+                        : 100,
+                    child: NavigationRail(
+                      backgroundColor: Colors.blueGrey.shade100,
+                      extended: width > 900 ? true : false,
+                      leading: Column(
+                        children: [
+                          SizedBox(height: 20),
+                        ],
+                      ),
+                      trailing: Column(
+                        children: [
+                          SizedBox(height: 20),
+                        ],
+                      ),
+                      destinations: [
+                        NavigationRailDestination(
+                          icon: Icon(Icons.home),
+                          label: Text('Home'),
+                        ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.favorite),
+                          label: Text('Activities'),
+                        ),
+                        if (height >= 300)
+                          NavigationRailDestination(
+                            icon: Icon(Icons.insert_chart_outlined_rounded),
+                            label: Text('Stats'),
+                          ),
+                        if (height >= 350)
+                          NavigationRailDestination(
+                            icon: Icon(Icons.calendar_month_outlined),
+                            label: Text('Calendar'),
+                          ),
+                        if (height >= 400)
+                          NavigationRailDestination(
+                            icon: Icon(Icons.handyman),
+                            label: Text('Settings'),
+                          ),
+                        if (height >= 400)
+                          NavigationRailDestination(
+                            icon: Icon(Icons.help_outline),
+                            label: Text('Help'),
+                          ),
+                        if (height >= 450)
+                          NavigationRailDestination(
+                            icon: Icon(Icons.logout),
+                            label: Text('Logout'),
+                          ),
+                      ],
+                      selectedIndex: selectedIndex,
+                      onDestinationSelected: (value) {
+                        setState(() {
+                          selectedIndex = value;
+                        });
+                      },
+                    ),
+                  ),
                 ),
-                trailing: Column(
-                  children: [
-                    SizedBox(height: 20),
-                  ],
+                Expanded(
+                  child: Container(
+                    color: const Color.fromARGB(255, 102, 156, 184),
+                    child: page,
+                  ),
                 ),
-                destinations: [
-                  NavigationRailDestination(
-                    icon: Icon(Icons.home),
-                    label: Text('Home'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.favorite),
-                    label: Text('Activities'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.insert_chart_outlined_rounded),
-                    label: Text('Stats'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.calendar_month_outlined),
-                    label: Text('Calendar'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.handyman),
-                    label: Text('Settings'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.help_outline),
-                    label: Text('Help'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.logout),
-                    label: Text('Logout'),
-                  ),
-                ],
-                selectedIndex: selectedIndex,
-                onDestinationSelected: (value) {
-                  setState(() {
-                    selectedIndex = value;
-                  });
-                },
-              ),
+              ],
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: const Color.fromARGB(255, 102, 156, 184),
-              child: page,
-            ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }

@@ -124,6 +124,7 @@ class _HomeState extends State<Home> {
                   Expanded(
                       child: MarginHandler(
                     widthRange: 1000,
+                    heightRange: 600,
                     children: [
                       MyCard(
                           temp: null,

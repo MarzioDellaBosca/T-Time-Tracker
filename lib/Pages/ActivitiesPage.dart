@@ -112,6 +112,8 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -145,154 +147,161 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
               ),
             ),
           ),
-          Expanded(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: FractionallySizedBox(
-                      widthFactor: 1.0,
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          color: Colors.white70,
-                        ),
-                        child: FocusScope(
-                          node: FocusScopeNode(),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 80.0,
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: MyInputTextField(
-                                        controller: titleController,
-                                        label: 'Title',
-                                        type: 1,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                      child: MyInputTextField(
-                                        controller: durationController,
-                                        label: 'Duration',
-                                        type: 1,
-                                      ),
-                                    )
-                                  ],
-                                ),
+          width <= 700 || height <= 500
+              ? Container()
+              : Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: FractionallySizedBox(
+                            widthFactor: 1.0,
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                color: Colors.white70,
                               ),
-                              SizedBox(height: 10),
-                              Container(
-                                height: 60.0,
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                              child: FocusScope(
+                                node: FocusScopeNode(),
+                                child: Column(
                                   children: [
-                                    Expanded(
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2000),
-                                            lastDate: DateTime(2100),
-                                          ).then((date) {
-                                            if (date != null) {
-                                              dateController.text =
-                                                  DateFormat('dd/MM/yy')
-                                                      .format(date);
-                                            }
-                                          });
-                                        },
-                                        child: Text('Date'),
+                                    Container(
+                                      height: 80.0,
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: MyInputTextField(
+                                              controller: titleController,
+                                              label: 'Title',
+                                              type: 1,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            child: MyInputTextField(
+                                              controller: durationController,
+                                              label: 'Duration',
+                                              type: 1,
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(width: 10),
-                                    Expanded(
-                                      child: Container(
-                                          height: 32.0,
-                                          child: MyDropDownButtor(
-                                              value: activityType,
-                                              hint: 'Type',
-                                              items: <String>[
-                                                'Work',
-                                                'Sport',
-                                                'Study',
-                                                'Other'
-                                              ],
-                                              onChanged: (String? newValue) {
-                                                setState(() {
-                                                  if (newValue != null)
-                                                    activityType = newValue;
-                                                  else {
-                                                    activityType = 'Other';
+                                    SizedBox(height: 10),
+                                    Container(
+                                      height: 60.0,
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                showDatePicker(
+                                                  context: context,
+                                                  initialDate: DateTime.now(),
+                                                  firstDate: DateTime(2000),
+                                                  lastDate: DateTime(2100),
+                                                ).then((date) {
+                                                  if (date != null) {
+                                                    dateController.text =
+                                                        DateFormat('dd/MM/yy')
+                                                            .format(date);
                                                   }
                                                 });
-                                              })),
-                                    )
+                                              },
+                                              child: Text('Date'),
+                                            ),
+                                          ),
+                                          SizedBox(width: 10),
+                                          Expanded(
+                                            child: Container(
+                                                height: 32.0,
+                                                child: MyDropDownButtor(
+                                                    value: activityType,
+                                                    hint: 'Type',
+                                                    items: <String>[
+                                                      'Work',
+                                                      'Sport',
+                                                      'Study',
+                                                      'Other'
+                                                    ],
+                                                    onChanged:
+                                                        (String? newValue) {
+                                                      setState(() {
+                                                        if (newValue != null)
+                                                          activityType =
+                                                              newValue;
+                                                        else {
+                                                          activityType =
+                                                              'Other';
+                                                        }
+                                                      });
+                                                    })),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    MyInputTextField(
+                                        controller: descriptionController,
+                                        type: 2,
+                                        label: 'Description'),
+                                    SizedBox(height: 10),
+                                    Center(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          addActivity();
+                                        },
+                                        child: Text('Add'),
+                                      ),
+                                    ),
+                                    if (selectedActivity != null)
+                                      ActivityDescription(
+                                          activity: selectedActivity!)
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 10),
-                              MyInputTextField(
-                                  controller: descriptionController,
-                                  type: 2,
-                                  label: 'Description'),
-                              SizedBox(height: 10),
-                              Center(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    addActivity();
-                                  },
-                                  child: Text('Add'),
-                                ),
-                              ),
-                              if (selectedActivity != null)
-                                ActivityDescription(activity: selectedActivity!)
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                        SizedBox(height: 10),
+                        FractionallySizedBox(
+                          widthFactor: 1.0,
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                    onPressed: () {
+                                      deleteActivity();
+                                    },
+                                    child: Text("Delete")),
+                                SizedBox(width: 10),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      modifyActivity();
+                                    },
+                                    child: Text("Modify")),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 10),
-                  FractionallySizedBox(
-                    widthFactor: 1.0,
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                deleteActivity();
-                              },
-                              child: Text("Delete")),
-                          SizedBox(width: 10),
-                          ElevatedButton(
-                              onPressed: () {
-                                modifyActivity();
-                              },
-                              child: Text("Modify")),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                ],
-              ),
-            ),
-          ),
+                ),
         ],
       ),
     );
