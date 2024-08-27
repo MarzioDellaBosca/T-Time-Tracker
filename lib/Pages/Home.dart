@@ -27,13 +27,13 @@ class _HomeState extends State<Home> {
       String ip = responseIp.body;
 
       final responseLoc = await http.get(Uri.parse(
-          'https://api.ipgeolocation.io/ipgeo?apiKey= PUT HERE YOUR APIKEY &ip=$ip'));
+          'https://api.ipgeolocation.io/ipgeo?apiKey=3053e1109ad84501acd6ed29471d2ccb&ip=$ip'));
       if (responseLoc.statusCode == 200) {
         String loc = responseLoc.body;
         Map<String, dynamic> map = json.decode(loc);
 
         final responseWeather = await http.get(Uri.parse(
-            'https://api.openweathermap.org/data/2.5/weather?lat=${map['latitude']}&lon=${map['longitude']}&appid= PUT API KEY &units=metric'));
+            'https://api.openweathermap.org/data/2.5/weather?lat=${map['latitude']}&lon=${map['longitude']}&appid=42e97e9acd8667854d957907b52ea325&units=metric'));
 
         if (responseWeather.statusCode == 200) {
           String weather = responseWeather.body;
